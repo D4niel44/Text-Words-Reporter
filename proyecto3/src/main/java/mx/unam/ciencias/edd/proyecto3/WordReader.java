@@ -26,15 +26,21 @@ public class WordReader {
 		while (true) {
 			int c = reader.read();
 			if (c == -1) {
-				if (s.length() == 0)
+				if (s.length() == 0) {
 					return null;
+				}
 				break;
 			}
-			if (Character.toString(c).matches("\\p{Cntrl}"))
-				if (s.length() != 0)
+			/* Maneja los caracteres de control */
+			if (Character.toString(c).matches("\\p{Cntrl}")) {
+				// si ya se empezó a leer la palabra se termina de leer, si no se continua a leer el
+				// siguiente caracter
+				if (s.length() != 0) {
 					break;
-			else
+				}
+			} else {
 				s.append(action.map(c));
+			}
 		}
 		return s.toString();
 	}
