@@ -32,7 +32,7 @@ public class WordReader {
 				break;
 			}
 			/* Maneja los caracteres de control */
-			if (Character.toString(c).matches("\\p{Cntrl}")) {
+			if (Character.toString((char) c).matches("\\p{Cntrl}")) {
 				// si ya se empezó a leer la palabra se termina de leer, si no se continua a leer el
 				// siguiente caracter
 				if (s.length() != 0) {
