@@ -1,6 +1,7 @@
 package mx.unam.ciencias.edd.proyecto3;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -10,7 +11,7 @@ import java.io.Reader;
 /**
  * Adaptador de la clase {@link BufferedReader} que permite leer por palabras.
  */
-public class WordReader {
+public class WordReader implements Closeable {
 	private BufferedReader reader;
 
 	public WordReader(Reader in) {
