@@ -11,18 +11,18 @@ import java.io.Reader;
 /**
  * Adaptador de la clase {@link BufferedReader} que permite leer por palabras.
  */
-public class WordReader implements Closeable {
+public class LectorPalabra implements Closeable {
 	private BufferedReader reader;
 
-	public WordReader(Reader in) {
+	public LectorPalabra(Reader in) {
 		reader = new BufferedReader(in);
 	}
 
-	public WordReader(String ruta) throws FileNotFoundException {
+	public LectorPalabra(String ruta) throws FileNotFoundException {
 		this(new FileReader(new File(ruta)));
 	}
 
-	public String readWord(CharAction action) throws IOException {
+	public String leePalabra(AccionCaracter action) throws IOException {
 		StringBuilder s = new StringBuilder();
 		while (true) {
 			int c = reader.read();
@@ -40,7 +40,7 @@ public class WordReader implements Closeable {
 					break;
 				}
 			} else {
-				s.append(action.map(c));
+				s.append(action.actua(c));
 			}
 		}
 		return s.toString();
