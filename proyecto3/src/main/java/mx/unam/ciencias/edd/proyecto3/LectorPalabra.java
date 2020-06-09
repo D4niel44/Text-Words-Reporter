@@ -18,8 +18,8 @@ public class LectorPalabra implements Closeable {
 		reader = new BufferedReader(in);
 	}
 
-	public LectorPalabra(String ruta) throws FileNotFoundException {
-		this(new FileReader(new File(ruta)));
+	public LectorPalabra(File archivo) throws FileNotFoundException {
+		this(new FileReader(archivo));
 	}
 
 	public String leePalabra(AccionCaracter action) throws IOException {
