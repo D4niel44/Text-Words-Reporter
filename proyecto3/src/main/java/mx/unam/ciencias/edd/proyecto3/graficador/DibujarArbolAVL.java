@@ -26,19 +26,19 @@ public class DibujarArbolAVL<T extends Comparable<T>> extends DibujarArbolBinari
     protected void graficarAuxiliar(VerticeArbolBinario<T> vertice, Pareja<Double, Double> puntoVertice, SVG svg,
             double radio, double incremento) {
         graficarAristas(vertice, puntoVertice, svg, radio, incremento);
-        svg.circuloConTexto(puntoVertice, radio, ColorSVG.NEGRO, ColorSVG.BLANCO, ColorSVG.NEGRO,
+        svg.circuloConTexto(puntoVertice, radio, ColorSVG.BLACK, ColorSVG.WHITE, ColorSVG.BLACK,
                 vertice.get().toString());
         int altura = vertice.altura();
         int alturaI = (vertice.hayIzquierdo()) ? vertice.izquierdo().altura() : -1;
         int alturaD = (vertice.hayDerecho()) ? vertice.derecho().altura() : -1;
         if (!vertice.hayPadre())
-            svg.texto(Pareja.crearPareja(puntoVertice.getX(), puntoVertice.getY() - radio * 1.25 - 2), ColorSVG.NEGRO,
+            svg.texto(Pareja.crearPareja(puntoVertice.getX(), puntoVertice.getY() - radio * 1.25 - 2), ColorSVG.BLACK,
                     radio / 2, String.format("{%d/%d}", altura, alturaI - alturaD));
         else if (vertice.padre().hayIzquierdo() && vertice.padre().izquierdo() == vertice)
             svg.texto(Pareja.crearPareja(puntoVertice.getX() - (radio / 3), puntoVertice.getY() - radio * 1.25 - 2),
-                    ColorSVG.NEGRO, radio / 2, String.format("{%d/%d}", altura, alturaI - alturaD));
+                    ColorSVG.BLACK, radio / 2, String.format("{%d/%d}", altura, alturaI - alturaD));
         else
             svg.texto(Pareja.crearPareja(puntoVertice.getX() + (radio / 3), puntoVertice.getY() - radio * 1.25 - 2),
-                    ColorSVG.NEGRO, radio * 3/5, String.format("{%d/%d}", altura, alturaI - alturaD));
+                    ColorSVG.BLACK, radio * 3/5, String.format("{%d/%d}", altura, alturaI - alturaD));
     }
 }

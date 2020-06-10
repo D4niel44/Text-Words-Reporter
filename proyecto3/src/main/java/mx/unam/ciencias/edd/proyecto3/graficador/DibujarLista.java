@@ -40,10 +40,10 @@ public class DibujarLista<T> implements GraficableSVG {
         while (iterador.hasNext()) {
             T elemento = iterador.next();
             svg.rectanguloConTexto(Pareja.crearPareja(25.0 * i++, 25.0), 25.0,
-                    25.0, ColorSVG.NEGRO, elemento.toString());
+                    25.0, ColorSVG.BLACK, elemento.toString());
             if (iterador.hasNext())
                 svg.flechaDoble(Pareja.crearPareja(25.0 * i++ + 2, 25.0 * 1.5),
-                        Pareja.crearPareja(25.0 * i - 2, 25.0 * 1.5), ColorSVG.NEGRO);
+                        Pareja.crearPareja(25.0 * i - 2, 25.0 * 1.5), ColorSVG.BLACK);
         }
         svg.imprimirSVG();
     }

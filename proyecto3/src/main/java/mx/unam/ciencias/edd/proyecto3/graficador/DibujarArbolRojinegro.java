@@ -28,17 +28,17 @@ public class DibujarArbolRojinegro<T extends Comparable<T>> extends DibujarArbol
     protected void graficarAuxiliar(VerticeArbolBinario<T> vertice, Pareja<Double, Double> puntoVertice, SVG svg,
             double radio, double incremento) {
         graficarAristas(vertice, puntoVertice, svg, radio, incremento);
-        svg.circuloConTexto(puntoVertice, radio, ColorSVG.NEGRO,
-                colorToColorSVG(((ArbolRojinegro<T>) arbolBinario).getColor(vertice)), ColorSVG.BLANCO,
+        svg.circuloConTexto(puntoVertice, radio, ColorSVG.BLACK,
+                colorToColorSVG(((ArbolRojinegro<T>) arbolBinario).getColor(vertice)), ColorSVG.WHITE,
                 vertice.get().toString());
     }
 
     /*Devuelve el color SVG equivalente al color de los árboles rojinegros.*/
     private ColorSVG colorToColorSVG(Color color) {
         if (color == Color.NEGRO)
-            return ColorSVG.NEGRO;
+            return ColorSVG.BLACK;
         if (color == Color.ROJO)
-            return ColorSVG.ROJO;
-        return ColorSVG.BLANCO;
+            return ColorSVG.RED;
+        return ColorSVG.WHITE;
     }
 }

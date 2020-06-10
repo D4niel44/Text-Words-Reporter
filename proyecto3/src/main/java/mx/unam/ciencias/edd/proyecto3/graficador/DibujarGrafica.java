@@ -64,9 +64,9 @@ public class DibujarGrafica<T> implements GraficableSVG {
                 if (puntoVecino.getX() == 0.0)
                     cambiarPunto(puntoVecino, largo, ancho, diametroM, angulo, i++);
                 if (vecino.getColor() != Color.NEGRO)
-                    svg.linea(puntoVertice, puntoVecino, ColorSVG.NEGRO);
+                    svg.linea(puntoVertice, puntoVecino, ColorSVG.BLACK);
             }
-            svg.circuloConTexto(puntoVertice, radioVertice, ColorSVG.NEGRO, ColorSVG.BLANCO, ColorSVG.NEGRO,
+            svg.circuloConTexto(puntoVertice, radioVertice, ColorSVG.BLACK, ColorSVG.WHITE, ColorSVG.BLACK,
                     elemento.getX().toString());
         }
         svg.imprimirSVG();

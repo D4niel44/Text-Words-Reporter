@@ -38,7 +38,7 @@ public class DibujarPila<T> implements GraficableSVG {
         while (!pila.esVacia()) {
             T elemento = pila.saca();
             svg.rectanguloConTexto(Pareja.crearPareja(25.0, 25.0 * i++), 25.0,
-                    25.0, ColorSVG.NEGRO, elemento.toString());
+                    25.0, ColorSVG.BLACK, elemento.toString());
         }
         svg.imprimirSVG();
     }

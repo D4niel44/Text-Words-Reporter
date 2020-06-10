@@ -41,7 +41,7 @@ public abstract class DibujarArbolBinario<T> implements GraficableSVG {
     protected void graficarAuxiliar(VerticeArbolBinario<T> vertice, Pareja<Double, Double> puntoVertice, SVG svg,
             double radio, double incremento) {
         graficarAristas(vertice, puntoVertice, svg, radio, incremento);
-        svg.circuloConTexto(puntoVertice, radio, ColorSVG.NEGRO, ColorSVG.BLANCO, ColorSVG.NEGRO,
+        svg.circuloConTexto(puntoVertice, radio, ColorSVG.BLACK, ColorSVG.WHITE, ColorSVG.BLACK,
                 vertice.get().toString());
     }
 
@@ -51,13 +51,13 @@ public abstract class DibujarArbolBinario<T> implements GraficableSVG {
         if (vertice.hayIzquierdo()) {
             Pareja<Double, Double> izquierdo = Pareja.crearPareja(puntoVertice.getX() - (incremento / 2),
                     puntoVertice.getY() + (radio * 4));
-            svg.linea(puntoVertice, izquierdo, ColorSVG.NEGRO);
+            svg.linea(puntoVertice, izquierdo, ColorSVG.BLACK);
             graficarAuxiliar(vertice.izquierdo(), izquierdo, svg, radio, incremento / 2);
         }
         if (vertice.hayDerecho()) {
             Pareja<Double, Double> derecho = Pareja.crearPareja(puntoVertice.getX() + incremento / 2,
                     puntoVertice.getY() + (radio * 4));
-            svg.linea(puntoVertice, derecho, ColorSVG.NEGRO);
+            svg.linea(puntoVertice, derecho, ColorSVG.BLACK);
             graficarAuxiliar(vertice.derecho(), derecho, svg, radio, incremento / 2);
         }
     }

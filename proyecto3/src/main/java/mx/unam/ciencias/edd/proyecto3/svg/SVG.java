@@ -152,6 +152,10 @@ public class SVG {
         linea(Pareja.crearPareja(punto2.getX() - 2, punto2.getY()), punto2, color);
     }
 
+
+	public void camino(Creadorcamino camino) {
+	}
+
     /**
      * Imprime el SVG generado en la salida estándar.
      */
