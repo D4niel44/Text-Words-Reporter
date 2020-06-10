@@ -153,7 +153,8 @@ public class SVG {
     }
 
 
-	public void camino(Creadorcamino camino) {
+	public void camino(CreadorCamino camino) {
+		svg.append(camino.construir());
 	}
 
     /**
