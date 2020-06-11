@@ -136,23 +136,6 @@ public class SVG {
         texto(Pareja.crearPareja(punto.getX(), punto.getY() + (radio / 2)), colorTexto, radio, texto);
     }
 
-    /**
-     * Añade un flecha curvada al SVG.
-     * 
-     * @param punto1          Punto inicial de la flecha.
-     * @param punto2          Punto final de la flecha.
-     * @param puntoReferencia Punto de referencia para la curvatura de la flecha.
-     * @param color           Color de la flecha.
-     */
-    public void flechaCurva(Pareja<Double, Double> punto1, Pareja<Double, Double> punto2,
-            Pareja<Double, Double> puntoReferencia, ColorSVG color) {
-        svg.append(String.format("    <path d='M %.2f %.2f Q %.2f %.2f %.2f %.2f' stroke='%s'/>", punto1.getX(),
-                punto1.getY(), puntoReferencia.getX(), puntoReferencia.getY(), punto2.getX(), punto2.getY(), color));
-        linea(punto2, Pareja.crearPareja(punto1.getX(), (puntoReferencia.getY() >= punto2.getY()) ? punto2.getY() - 2 : punto2.getY() + 2), color);
-        linea(Pareja.crearPareja(punto2.getX() - 2, punto2.getY()), punto2, color);
-    }
-
-
 	public void camino(CreadorCamino camino) {
 		svg.append(camino.construir());
 	}
