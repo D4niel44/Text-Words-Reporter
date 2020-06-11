@@ -9,7 +9,8 @@ public class SVG {
 
     private StringBuilder svg;
     public final double largo, ancho;
-
+	private int nivelIndentacion;
+	
     /**
      * Constructor que crea un SVG con el largo y ancho especificado.
      * 
@@ -20,9 +21,22 @@ public class SVG {
         this.largo = largo;
         this.ancho = ancho;
         svg = new StringBuilder(String.format(
-                "<?xml version='1.0' encoding='UTF-8' ?>\n<svg width='%.2f' height='%.2f' xmlns='http://www.w3.org/2000/svg'>\n  <g>", ancho, largo));
+                "<?xml version='1.0' encoding='UTF-8' ?>\n<svg width='%.2f' height='%.2f' xmlns='http://www.w3.org/2000/svg'>\n", ancho, largo));
+		nivelIndentacion = 1;
     }
 
+	public void crearGrafico(String clase) {
+		svg.append(indentar());
+		svg.append(String.format("<g class=%s>\n", clase));
+		++nivelIndentacion;
+	}
+
+	public void cerrarGrafico() {
+		--nivelIndentacion;
+		svg.append(indentar());
+		svg.append("</g>\n");
+	}
+	
     /**
      * Representación SVG de una línea
      * 
@@ -31,7 +45,8 @@ public class SVG {
      * @return representación SVG de una línea.
      */
     public void linea(Pareja<Double, Double> punto1, Pareja<Double, Double> punto2, ColorSVG color) {
-        svg.append(String.format("    <line x1='%.2f' y1='%.2f' x2='%.2f' y2='%.2f' stroke='%s' stroke-width='1' />\n",
+		svg.append(indentar());
+        svg.append(String.format("<line x1='%.2f' y1='%.2f' x2='%.2f' y2='%.2f' stroke='%s' stroke-width='1' />\n",
                 punto1.getX(), punto1.getY(), punto2.getX(), punto2.getY(), color.getValor()));
     }
 
@@ -45,7 +60,8 @@ public class SVG {
      * @return representación SVG de un círculo
      */
     public void circulo(Pareja<Double, Double> punto, double radio, ColorSVG colorLinea, ColorSVG colorRelleno) {
-        svg.append(String.format("    <circle cx='%.2f' cy='%.2f' r='%.2f' stroke='%s' stroke-width='2' fill='%s' />\n",
+		svg.append(indentar());
+        svg.append(String.format("<circle cx='%.2f' cy='%.2f' r='%.2f' stroke='%s' stroke-width='2' fill='%s' />\n",
                 punto.getX(), punto.getY(), radio, colorLinea.getValor(), colorRelleno.getValor()));
     }
 
@@ -59,8 +75,9 @@ public class SVG {
      * 
      */
     public void texto(Pareja<Double, Double> punto, ColorSVG colorRelleno, double tamanio, String texto) {
-        svg.append(String.format(
-                "    <text fill='%s' font-family='sans-serif' font-size='%.2f' x='%.2f' y='%.2f' text-anchor='middle'>%s</text>\n",
+		svg.append(indentar());
+		svg.append(String.format(
+                "<text fill='%s' font-family='sans-serif' font-size='%.2f' x='%.2f' y='%.2f' text-anchor='middle'>%s</text>\n",
                 colorRelleno.getValor(), tamanio, punto.getX(), punto.getY(), texto));
     }
 
@@ -72,7 +89,9 @@ public class SVG {
      * @param ancho      Ancho del rectángulo.
      * @param colorLinea Color de la línea del rectángulo.
      */
-    public void rectangulo(Pareja<Double, Double> punto, double largo, double ancho, ColorSVG colorLinea) {
+	public void rectangulo(Pareja<Double, Double> punto, double largo, double ancho,
+			ColorSVG colorLinea) {
+		svg.append(indentar());
         svg.append(String.format("<rect x='%.2f' y='%.2f' width='%.2f' height='%.2f' stroke='%s' fill='white' stroke-width='1'/>\n",
                 punto.getX(), punto.getY(), ancho, largo, colorLinea.getValor()));
     }
@@ -155,6 +174,18 @@ public class SVG {
 	}
 
 	public void cerrarSVG() {
-		svg.append("  </g>\n</svg>");
+		while (nivelIndentacion > 1)
+			cerrarGrafico();
+		--nivelIndentacion;
+		svg.append("</svg>\n");
+	}
+
+	/* Devuelve una cadena con la indentación propia para el nivel actual en el que se encuentra el SVG */
+	private String indentar() {
+		StringBuilder indentacion = new StringBuilder();
+		for (int i = 0; i < nivelIndentacion; i++) {
+			indentacion.append("    ");
+		}
+		return indentacion.toString();
 	}
 }
