@@ -41,6 +41,21 @@ public class CreadorCamino {
 		return this;
 	}
 
+	public CreadorCamino colorRelleno(ColorSVG colorRelleno) {
+		this.colorRelleno = colorRelleno;
+		return this;
+	}
+
+	public CreadorCamino colorBorde(ColorSVG colorBorde) {
+		this.colorBorde = colorBorde;
+		return this;
+	}
+
+	public CreadorCamino anchoLinea(double anchoLinea) {
+		this.anchoLinea = anchoLinea;
+		return this;
+	}
+	
 	public String construir() {
 		return String.format("<path d=\"%s\" fill=\"%s\" stroke=\"%s\" stroke-width=\"%.2f\" />",
 				d.toString(), colorRelleno.getValor(), colorBorde.getValor(), anchoLinea);

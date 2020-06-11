@@ -161,7 +161,17 @@ public class SVG {
      * Imprime el SVG generado en la salida estándar.
      */
     public void imprimirSVG() {
-        svg.append("  </g>\n</svg>");
+		cerrarSVG();
         System.out.print(svg.toString());
     }
+
+	@Override
+	public String toString() {
+		cerrarSVG();
+		return svg.toString();
+	}
+
+	public void cerrarSVG() {
+		svg.append("  </g>\n</svg>");
+	}
 }
