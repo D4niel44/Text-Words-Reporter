@@ -10,10 +10,15 @@ import mx.unam.ciencias.edd.Diccionario;
 import mx.unam.ciencias.edd.MonticuloMinimo;
 
 /**
- * 
+ * Clase para representar archivo de texto que pueden contar las palabras y
+ * recorrerlas
  */
 public class Archivo implements Iterable<Archivo.PalabraContada> {
 
+	/**
+	 * Clase para representar una palabra del archivo, junto con el número de veces
+	 * que se encuentra repetida en él.
+	 */
 	public static class PalabraContada implements ComparableIndexable<PalabraContada> {
 
 		private String palabra;
@@ -26,14 +31,34 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 			this.indice = -1;
 		}
 
+		/**
+		 * Regresa una cadena con la palabra.
+		 * 
+		 * @return Cadena con la palabra.
+		 */
 		public String obtenerPalabra() {
 			return palabra;
 		}
 
+		/**
+		 * Regresa el número de veces que se encuentra repetida la palabra
+		 * 
+		 * @return Número de repeticiones de la palabra.
+		 */
 		public int obtenerRepeticiones() {
 			return repeticiones;
 		}
 
+		/**
+		 * Compara dos Palabras según el número de veces que se encuentra repetida cada
+		 * una en el archivo.
+		 * 
+		 * @param otraPalabra La otra palabra con la cuál comparar esta.
+		 * @return Un número menor que cero si la palabra con la cual se llama al método
+		 *         se repite más veces en el archivo que la otra, igual a cero si ambas
+		 *         tienen el mismo número de repeticiones y mayor a cero si la otra
+		 *         palabra se repite más veces en el archivo.
+		 */
 		@Override
 		public int compareTo(PalabraContada otraPalabra) {
 			return otraPalabra.repeticiones - this.repeticiones;
