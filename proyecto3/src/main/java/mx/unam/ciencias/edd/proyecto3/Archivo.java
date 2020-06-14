@@ -52,15 +52,15 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 
 	private class Iterador implements Iterator<PalabraContada> {
 
-		private final Iterator<String> iteradorDiccionario = palabras.iteradorLlaves();
+		private final Iterator<CadenaNormalizada> iteradorDiccionario = palabras.iteradorLlaves();
 
 		public boolean hasNext() {
 			return iteradorDiccionario.hasNext();
 		}
 
 		public PalabraContada next() {
-			String palabra = iteradorDiccionario.next();
-			return new PalabraContada(palabra, palabras.get(palabra));
+			CadenaNormalizada palabra = iteradorDiccionario.next();
+			return new PalabraContada(palabra.cadena, palabras.get(palabra));
 		}
 	}
 
