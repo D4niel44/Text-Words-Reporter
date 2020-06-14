@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
+import java.text.Normalizer;
 import mx.unam.ciencias.edd.ComparableIndexable;
 import mx.unam.ciencias.edd.Diccionario;
 import mx.unam.ciencias.edd.MonticuloMinimo;
@@ -63,19 +64,49 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 		}
 	}
 
+	private static class CadenaNormalizada {
+		private String cadena;
+		private String cadenaNormalizada;
+
+		public CadenaNormalizada(String cadena) {
+			this.cadena = cadena;
+			this.cadenaNormalizada = Normalizer.normalize(cadena, Normalizer.Form.NFKD);
+			cadenaNormalizada = cadenaNormalizada.toLowerCase();
+			cadenaNormalizada = cadenaNormalizada.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+		}
+
+		public String toString() {
+			return cadena;
+		}
+
+		@Override
+		public int hashCode() {
+			return cadenaNormalizada.hashCode();
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (o == null || getClass() != o.getClass())
+				return false;
+			CadenaNormalizada otra = (CadenaNormalizada) o;
+			return this.cadenaNormalizada.equals(otra.cadenaNormalizada);
+		}
+	}
+
 	/* Diccionario con las palabras del archivo. */
-	private Diccionario<String, Integer> palabras;
+	private Diccionario<CadenaNormalizada, Integer> palabras;
 
 	public Archivo(File archivo, AccionCaracter accion) throws FileNotFoundException, IOException {
 		palabras = new Diccionario<>();
 		try (LectorPalabra in = new LectorPalabra(archivo)) {
 			String palabra = in.leePalabra(accion);
 			while (palabra != null) {
-				if (!palabras.contiene(palabra)) {
-					palabras.agrega(palabra, 1);
+				CadenaNormalizada palabraNormalizada = new CadenaNormalizada(palabra);
+				if (!palabras.contiene(palabraNormalizada)) {
+					palabras.agrega(palabraNormalizada, 1);
 				} else {
-					int repeticiones = palabras.get(palabra);
-					palabras.agrega(palabra, repeticiones + 1);
+					int repeticiones = palabras.get(palabraNormalizada);
+					palabras.agrega(palabraNormalizada, repeticiones + 1);
 				}
 				palabra = in.leePalabra(accion);
 			}
@@ -87,7 +118,7 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 	}
 
 	public boolean contienePalabra(String palabra) {
-		return palabras.contiene(palabra);
+		return palabras.contiene(new CadenaNormalizada(palabra));
 	}
 
 	public MonticuloMinimo<Archivo.PalabraContada> monticuloPalabras() {
