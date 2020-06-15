@@ -17,6 +17,7 @@ public enum ColorSVG {
 	BLANCHEDALMOND("#ffebcd"),
 	BLUE("#0000ff"),
 	BLUEVIOLET("#8a2be2"),
+	BONDIBLUE("#058CB6"),
 	BROWN("#a52a2a"),
 	BURLYWOOD("#deb887"),
 	BUTTERFLYBUSH("#665191"),
