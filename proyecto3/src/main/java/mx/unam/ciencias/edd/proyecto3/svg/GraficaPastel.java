@@ -19,7 +19,7 @@ public class GraficaPastel {
 	 * @param diametro  Diámetro de la gráfica de pastel.
 	 * @param elementos Colección de elementos de la gráfica de pastel, donde cada
 	 *                  elemento es una pareja correspondiendo el primer elemento de
-	 *                  la pareja a la etiqueta del elemento a gráficar y el segundo
+	 *                  la pareja a la etiqueta del elemento a graficar y el segundo
 	 *                  elemento de la pareja al valor de dicha etiqueta
 	 * @param total     Valor total a partir del cuál se va a sacar el porcentaje de
 	 *                  valor de cada etiqueta.
