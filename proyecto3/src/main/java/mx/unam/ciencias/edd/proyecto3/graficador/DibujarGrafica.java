@@ -11,6 +11,7 @@ import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 
 /**
  * Clase para dibujar gráficas y representarlas en formato SVG.
+ * 
  * @param <T> Tipo de la gráfica.
  */
 public class DibujarGrafica<T> implements GraficableSVG {
@@ -19,6 +20,7 @@ public class DibujarGrafica<T> implements GraficableSVG {
 
     /**
      * Crea una grafica dibujable a partir de la colección recibida como parámetro.
+     * 
      * @param coleccion Pares de elementos representando aristas de la gráfica.
      */
     public DibujarGrafica(Coleccion<T> coleccion) {
@@ -41,10 +43,13 @@ public class DibujarGrafica<T> implements GraficableSVG {
     }
 
     /**
-     * Crea una representación en formato SVG de la gráfica y la imprime en la salida estándar.
+     * Crea una representación en formato SVG de la gráfica y la imprime en la
+     * salida estándar.
+     * 
+     * @return Una cadena con el código fuente del SVG generado.
      */
     @Override
-    public void graficarSVG() {
+    public String graficarSVG() {
         double radioVertice = 15;
         double diametroM = (grafica.getElementos() * radioVertice * 4.5) / Math.PI;
         double largo = diametroM + radioVertice * 4;
@@ -69,7 +74,7 @@ public class DibujarGrafica<T> implements GraficableSVG {
             svg.circuloConTexto(puntoVertice, radioVertice, ColorSVG.BLACK, ColorSVG.WHITE, ColorSVG.BLACK,
                     elemento.getX().toString());
         }
-        svg.imprimirSVG();
+        return svg.toString();
     }
 
     private void cambiarPunto(Pareja<Double, Double> punto, double largo, double ancho, double diametro, double angulo,

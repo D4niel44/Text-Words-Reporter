@@ -8,6 +8,7 @@ import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 
 /**
  * Clase para generar un SVG con al rerpesentación de una lista.
+ * 
  * @param <T> Tipo de la lista.
  */
 public class DibujarLista<T> implements GraficableSVG {
@@ -27,11 +28,10 @@ public class DibujarLista<T> implements GraficableSVG {
      * Genera un SVG con una representación gráfica de la lista y lo imprime en la
      * salida estándar.
      * 
-     * @param largo largo del SVG a generar.
-     * @param ancho ancho del SVG a generar.
+     * @return Una cadena con el código fuente del SVG generado.
      */
     @Override
-    public void graficarSVG() {
+    public String graficarSVG() {
         double largo = 75;
         double ancho = lista.getElementos() * 50 + 5;
         SVG svg = new SVG(largo, ancho);
@@ -39,12 +39,12 @@ public class DibujarLista<T> implements GraficableSVG {
         Iterator<T> iterador = lista.iterator();
         while (iterador.hasNext()) {
             T elemento = iterador.next();
-            svg.rectanguloConTexto(Pareja.crearPareja(25.0 * i++, 25.0), 25.0,
-                    25.0, ColorSVG.BLACK, elemento.toString());
+            svg.rectanguloConTexto(Pareja.crearPareja(25.0 * i++, 25.0), 25.0, 25.0, ColorSVG.BLACK,
+                    elemento.toString());
             if (iterador.hasNext())
                 svg.flechaDoble(Pareja.crearPareja(25.0 * i++ + 2, 25.0 * 1.5),
                         Pareja.crearPareja(25.0 * i - 2, 25.0 * 1.5), ColorSVG.BLACK);
         }
-        svg.imprimirSVG();
+        return svg.toString();
     }
 }

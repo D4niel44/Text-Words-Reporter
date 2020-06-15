@@ -8,6 +8,7 @@ import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 
 /**
  * Clase para generar un SVG con la representación de una cola.
+ * 
  * @param <T> Tipo de la cola a dibujar.
  */
 public class DibujarCola<T> implements GraficableSVG {
@@ -17,6 +18,7 @@ public class DibujarCola<T> implements GraficableSVG {
 
     /**
      * Crea una cola dibujable a partir de la coleccion pasada como parametro.
+     * 
      * @param coleccion
      */
     public DibujarCola(Coleccion<T> coleccion) {
@@ -28,9 +30,11 @@ public class DibujarCola<T> implements GraficableSVG {
 
     /**
      * Genera un SVG que representa la cola.
+     * 
+     * @return Una cadena con el código fuente del SVG generado.
      */
     @Override
-    public void graficarSVG() {
+    public String graficarSVG() {
         double largo = 75;
         double ancho = elementos * 50 + 5;
         SVG svg = new SVG(largo, ancho);
@@ -43,7 +47,7 @@ public class DibujarCola<T> implements GraficableSVG {
                 svg.flechaSencilla(Pareja.crearPareja(25.0 * i++ + 2, 25.0 * 1.5),
                         Pareja.crearPareja(25.0 * i - 2, 25.0 * 1.5), ColorSVG.BLACK);
         }
-        svg.imprimirSVG();
+        return svg.toString();
     }
 
 }

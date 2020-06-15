@@ -8,6 +8,7 @@ public interface GraficableSVG {
     
     /**
      * Método que provee una representación gráfica como un SVG de la clase.
+     * @return Representación como una cadena del código SVG de la estructura de datos.
      */
-    public void graficarSVG();
+    public String graficarSVG();
 }
