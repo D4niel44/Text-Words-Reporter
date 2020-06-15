@@ -3,12 +3,26 @@ package mx.unam.ciencias.edd.proyecto3.svg;
 import mx.unam.ciencias.edd.Coleccion;
 import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 
+/**
+ * Clase para crear gráficas de barras verticales a partir de una coleccion de
+ * parejas de identificadores con sus correspondientes valores.
+ */
 public class GraficaBarras {
 
     private SVG graficaBarras;
     private static final ColorSVG colorBarras = ColorSVG.BONDIBLUE;
 
-    public GraficaBarras(Coleccion<Pareja<String, Number>> elementos, double total, String otros) {
+    /**
+	 * Crea una gráfica de barras a partir de los datos introducidos.
+	 * 
+	 * @param elementos Colección de elementos de la gráfica de pastel, donde cada
+	 *                  elemento es una pareja correspondiendo el primer elemento de
+	 *                  la pareja a la etiqueta del elemento a graficar y el segundo
+	 *                  elemento de la pareja al valor de dicha etiqueta
+	 * @param total     Valor total a partir del cuál se va a sacar el porcentaje de
+	 *                  valor de cada etiqueta.
+	 */
+    public GraficaBarras(Coleccion<Pareja<String, Number>> elementos, double total) {
         // Crea un nuevo svg con ancho relativo al número de elementos en la colección y
         // con largo 3/4 partes respecto al ancho
         double ancho = elementos.getElementos() * 35 + 15;
@@ -35,6 +49,10 @@ public class GraficaBarras {
         graficaBarras.linea(Pareja.crearPareja(5.0, 10.0), Pareja.crearPareja(5.0, largo), ColorSVG.BLACK); // Y
     }
 
+    /**
+     * Representación en cadena de la Gráfica de Barras.
+     * @return Cadena con el código SVG correspondiente a la gráfica de barras.
+     */
     @Override
     public String toString() {
         return null;
