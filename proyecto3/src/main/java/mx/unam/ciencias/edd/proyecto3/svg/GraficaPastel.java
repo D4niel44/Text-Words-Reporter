@@ -70,7 +70,6 @@ public class GraficaPastel {
 			graficaPastel.texto(Pareja.crearPareja(diametro + 10, (j + 0.5) * anchoRectangulo), ColorSVG.BLACK,
 					anchoRectangulo, otros);
 		}
-		graficaPastel.cerrarGrafico();
 	}
 
 	/**
