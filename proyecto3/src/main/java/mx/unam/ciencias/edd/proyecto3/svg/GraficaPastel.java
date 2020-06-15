@@ -1,8 +1,7 @@
 package mx.unam.ciencias.edd.proyecto3.svg;
 
-import java.lang.Number;
-import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 import mx.unam.ciencias.edd.Coleccion;
+import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 
 /**
  * Clase para generar gráficas de pastel. Genera gráficas de pastel con leyendas
