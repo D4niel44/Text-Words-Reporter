@@ -44,8 +44,7 @@ public class HTML {
      */
     public void imprimirHTML(Writer salida) throws IOException {
         try (BufferedWriter out = new BufferedWriter(salida)) {
-            out.write(IDENTIFICADOR);
-            
+            out.write(IDENTIFICADOR);    
         }
     }
 
