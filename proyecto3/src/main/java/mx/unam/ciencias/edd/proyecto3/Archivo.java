@@ -121,10 +121,10 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 	/* Diccionario con las palabras del archivo. */
 	private Diccionario<CadenaNormalizada, Integer> palabras;
 
-	public Archivo(File archivo, AccionCaracter accion) throws FileNotFoundException, IOException {
+	public Archivo(File archivo) throws FileNotFoundException, IOException {
 		palabras = new Diccionario<>();
 		try (LectorPalabra in = new LectorPalabra(archivo)) {
-			String palabra = in.leePalabra(accion);
+			String palabra = in.leePalabra();
 			while (palabra != null) {
 				CadenaNormalizada palabraNormalizada = new CadenaNormalizada(palabra);
 				if (!palabras.contiene(palabraNormalizada)) {
@@ -133,7 +133,7 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 					int repeticiones = palabras.get(palabraNormalizada);
 					palabras.agrega(palabraNormalizada, repeticiones + 1);
 				}
-				palabra = in.leePalabra(accion);
+				palabra = in.leePalabra();
 			}
 		}
 	}

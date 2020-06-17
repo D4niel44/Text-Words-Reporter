@@ -22,7 +22,7 @@ public class LectorPalabra implements Closeable {
 		this(new FileReader(archivo));
 	}
 
-	public String leePalabra(AccionCaracter action) throws IOException {
+	public String leePalabra() throws IOException {
 		StringBuilder s = new StringBuilder();
 		while (true) {
 			int c = reader.read();
@@ -40,7 +40,7 @@ public class LectorPalabra implements Closeable {
 					break;
 				}
 			} else {
-				s.append(action.actua(c));
+				s.append(c);
 			}
 		}
 		return s.toString();
