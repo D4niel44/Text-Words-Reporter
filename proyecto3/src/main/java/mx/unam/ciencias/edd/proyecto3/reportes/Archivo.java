@@ -1,4 +1,4 @@
-package mx.unam.ciencias.edd.proyecto3;
+package mx.unam.ciencias.edd.proyecto3.reportes;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,6 +8,7 @@ import java.text.Normalizer;
 import mx.unam.ciencias.edd.ComparableIndexable;
 import mx.unam.ciencias.edd.Diccionario;
 import mx.unam.ciencias.edd.MonticuloMinimo;
+import mx.unam.ciencias.edd.proyecto3.io.LectorPalabra;
 
 /**
  * Clase para representar archivo de texto que pueden contar las palabras y

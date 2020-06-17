@@ -1,4 +1,4 @@
-package mx.unam.ciencias.edd.proyecto3;
+package mx.unam.ciencias.edd.proyecto3.io;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
