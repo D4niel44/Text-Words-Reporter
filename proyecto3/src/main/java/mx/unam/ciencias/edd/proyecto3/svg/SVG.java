@@ -27,6 +27,8 @@ public class SVG {
     }
 
     public void crearGrafico(String clase) {
+        if (clase == null)
+            throw new IllegalArgumentException("No se admiten valores null");
         svg.append(indentar());
         svg.append(String.format("<g class=%s>\n", clase));
         ++nivelIndentacion;
@@ -46,6 +48,8 @@ public class SVG {
      * @return representación SVG de una línea.
      */
     public void linea(Pareja<Double, Double> punto1, Pareja<Double, Double> punto2, ColorSVG color) {
+        if (punto1 == null || punto2 == null || color == null)
+            throw new IllegalArgumentException("No se admiten valores null");
         svg.append(indentar());
         svg.append(String.format("<line x1='%.2f' y1='%.2f' x2='%.2f' y2='%.2f' stroke='%s' stroke-width='1' />\n",
                 punto1.getX(), punto1.getY(), punto2.getX(), punto2.getY(), color.getValor()));
@@ -61,6 +65,8 @@ public class SVG {
      * @return representación SVG de un círculo
      */
     public void circulo(Pareja<Double, Double> punto, double radio, ColorSVG colorLinea, ColorSVG colorRelleno) {
+        if (punto == null || colorLinea == null || colorRelleno == null)
+            throw new IllegalArgumentException("No se admiten valores null");
         svg.append(indentar());
         svg.append(String.format("<circle cx='%.2f' cy='%.2f' r='%.2f' stroke='%s' stroke-width='2' fill='%s' />\n",
                 punto.getX(), punto.getY(), radio, colorLinea.getValor(), colorRelleno.getValor()));
@@ -76,6 +82,8 @@ public class SVG {
      * 
      */
     public void texto(Pareja<Double, Double> punto, ColorSVG colorRelleno, double tamanio, String texto) {
+        if (punto == null || colorRelleno == null || texto == null)
+            throw new IllegalArgumentException("No se admiten valores null");
         svg.append(indentar());
         svg.append(String.format(
                 "<text fill='%s' font-family='sans-serif' font-size='%.2f' x='%.2f' y='%.2f' text-anchor='middle'>%s</text>\n",
@@ -91,6 +99,8 @@ public class SVG {
      * @param colorLinea Color de la línea del rectángulo.
      */
     public void rectangulo(Pareja<Double, Double> punto, double largo, double ancho, ColorSVG colorLinea) {
+        if (punto == null || colorLinea == null)
+            throw new IllegalArgumentException("No se admiten valores null");
         svg.append(indentar());
         svg.append(String.format(
                 "<rect x='%.2f' y='%.2f' width='%.2f' height='%.2f' stroke='%s' fill='white' stroke-width='1'/>\n",
@@ -100,14 +110,16 @@ public class SVG {
     /**
      * Agrega un rectángulo al SVG.
      * 
-     * @param punto      Punto de referencia del rectángulo
-     * @param largo      Largo del rectángulo.
-     * @param ancho      Ancho del rectángulo.
-     * @param colorLinea Color de la línea del rectángulo.
+     * @param punto        Punto de referencia del rectángulo
+     * @param largo        Largo del rectángulo.
+     * @param ancho        Ancho del rectángulo.
+     * @param colorLinea   Color de la línea del rectángulo.
      * @param colorRelleno Color de relleno del rectángulo.
      */
     public void rectangulo(Pareja<Double, Double> punto, double largo, double ancho, ColorSVG colorLinea,
             ColorSVG colorRelleno) {
+        if (punto == null || colorLinea == null || colorRelleno == null)
+            throw new IllegalArgumentException("No se admiten valores null");
         svg.append(indentar());
         svg.append(String.format(
                 "<rect x='%.2f' y='%.2f' width='%.2f' height='%.2f' stroke='%s' fill='%s' stroke-width='1'/>\n",
