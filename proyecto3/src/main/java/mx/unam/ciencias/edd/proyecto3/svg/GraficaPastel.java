@@ -52,7 +52,7 @@ public class GraficaPastel {
 			double porciento = palabra.obtenerRepeticiones() / total;
 			double finalX = x + Math.cos(porciento * 2 * Math.PI);
 			double finalY = y + Math.sin(porciento * 2 * Math.PI);
-			ColorSVG colorElemento = COLORES[i % 9];
+			ColorSVG colorElemento = COLORES[i % 8];
 			graficaPastel.camino(rebanada.puntoInicio(x, y)
 					.arco(centro, centro, 0, (porciento >= total / 2) ? 1 : 0, 1, finalX, finalY).cerrarSubcamino()
 					.colorRelleno(colorElemento).colorBorde(colorElemento).anchoLinea(1));
