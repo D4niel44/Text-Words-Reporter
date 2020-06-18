@@ -7,8 +7,7 @@ package mx.unam.ciencias.edd.proyecto3.graficador;
 public interface GraficableSVG {
     
     /**
-     * Método que provee una representación gráfica como un SVG de la clase.
-     * @return Representación como una cadena del código SVG de la estructura de datos.
+     * Genera un SVG con una representación del objeto y lo imprime en la salida estandar.
      */
-    public String graficarSVG();
+    public void graficarSVG();
 }
