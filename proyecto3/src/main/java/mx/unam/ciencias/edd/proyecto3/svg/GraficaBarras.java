@@ -1,5 +1,10 @@
 package mx.unam.ciencias.edd.proyecto3.svg;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+
+import mx.unam.ciencias.edd.Coleccion;
+import mx.unam.ciencias.edd.proyecto3.html.ContenidoHTML;
 import mx.unam.ciencias.edd.proyecto3.reportes.Archivo;
 import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 
@@ -7,26 +12,27 @@ import mx.unam.ciencias.edd.proyecto3.util.Pareja;
  * Clase para crear gráficas de barras verticales a partir de una coleccion de
  * parejas de identificadores con sus correspondientes valores.
  */
-public class GraficaBarras {
+public class GraficaBarras implements ContenidoHTML {
 
     private SVG graficaBarras;
     private static final ColorSVG colorBarras = ColorSVG.BONDIBLUE;
 
     /**
-	 * Crea una gráfica de barras a partir de los datos introducidos.
-	 * 
-	 * @param elementos Colección de elementos de la gráfica de pastel, donde cada
-	 *                  elemento es una pareja correspondiendo el primer elemento de
-	 *                  la pareja a la etiqueta del elemento a graficar y el segundo
-	 *                  elemento de la pareja al valor de dicha etiqueta
-	 * @param total     Valor total a partir del cuál se va a sacar el porcentaje de
-	 *                  valor de cada etiqueta.
+     * Crea una gráfica de barras a partir de los datos introducidos.
+     * 
+     * @param elementos      Colección de elementos de la gráfica de pastel, donde
+     *                       cada elemento es una pareja correspondiendo el primer
+     *                       elemento de la pareja a la etiqueta del elemento a
+     *                       graficar y el segundo elemento de la pareja al valor de
+     *                       dicha etiqueta
+     * @param total          Valor total a partir del cuál se va a sacar el
+     *                       porcentaje de valor de cada etiqueta.
      * @param totalElementos Total de elementos en el iterable
-	 */
-    public GraficaBarras(Iterable<Archivo.PalabraContada> elementos, double totalElementos, double total) {
+     */
+    public GraficaBarras(Coleccion<Archivo.PalabraContada> elementos, double total) {
         // Crea un nuevo svg con ancho relativo al número de elementos en la colección y
         // con largo 3/4 partes respecto al ancho
-        double ancho = totalElementos * 35 + 15;
+        double ancho = elementos.getElementos() * 35 + 15;
         double largo = 3 / 4 * ancho;
         graficaBarras = new SVG(largo + 20, ancho + 5);
         // Crea un nuevo gráfico con clase barChart
@@ -42,7 +48,8 @@ public class GraficaBarras {
             // Añade los textos que describen la barra
             graficaBarras.texto(Pareja.crearPareja(posicionX + 10, posicionY - 2), ColorSVG.BLACK, 8.0,
                     String.format("%.2f", valorElemento)); // valor que representa la barra
-            graficaBarras.texto(Pareja.crearPareja(posicionX + 10, largo + 12), ColorSVG.BLACK, 8.0, elemento.obtenerPalabra()); // Identificador
+            graficaBarras.texto(Pareja.crearPareja(posicionX + 10, largo + 12), ColorSVG.BLACK, 8.0,
+                    elemento.obtenerPalabra()); // Identificador
             posicionX += 35;
         }
         // Dibuja los ejes de la gráfica de barras
@@ -58,5 +65,15 @@ public class GraficaBarras {
     @Override
     public String toString() {
         return graficaBarras.toString();
+    }
+
+    @Override
+    public String codigoHTML() {
+        return graficaBarras.codigoHTML();
+    }
+
+    @Override
+    public void imprimirCodigoHTML(BufferedWriter out) throws IOException {
+        graficaBarras.imprimirCodigoHTML(out);
     }
 }

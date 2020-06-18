@@ -1,13 +1,19 @@
 package mx.unam.ciencias.edd.proyecto3.svg;
 
 import mx.unam.ciencias.edd.proyecto3.reportes.Archivo;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+
+import mx.unam.ciencias.edd.Coleccion;
+import mx.unam.ciencias.edd.proyecto3.html.ContenidoHTML;
 import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 
 /**
  * Clase para generar gráficas de pastel. Genera gráficas de pastel con leyendas
  * a un lado de los elementos.
  */
-public class GraficaPastel {
+public class GraficaPastel implements ContenidoHTML {
 
 	private SVG graficaPastel;
 	private static final ColorSVG[] COLORES = { ColorSVG.ASTRONAUTBLUE, ColorSVG.CHAMBRAY, ColorSVG.BUTTERFLYBUSH,
@@ -32,8 +38,7 @@ public class GraficaPastel {
 	 *                       (se representará de igual manera en la lista con color
 	 *                       gris).
 	 */
-	public GraficaPastel(double diametro, Iterable<Archivo.PalabraContada> elementos, double totalElementos,
-			double total, String otros) {
+	public GraficaPastel(double diametro, Coleccion<Archivo.PalabraContada> elementos, double total, String otros) {
 		graficaPastel = new SVG(diametro, diametro * 2);
 		// Genera la gráfica de pastel
 		graficaPastel.crearGrafico("pieChart"); // crea un <g> con clase pieChart
@@ -42,6 +47,7 @@ public class GraficaPastel {
 		double x = centro;
 		double y = 0;
 		CreadorCamino rebanada = new CreadorCamino();
+		double totalElementos = elementos.getElementos();
 		if (otros != null)
 			totalElementos += 2;
 		double anchoRectangulo = (2 * totalElementos + 1) / diametro;
@@ -82,5 +88,15 @@ public class GraficaPastel {
 	 */
 	public String toString() {
 		return graficaPastel.toString();
+	}
+
+	@Override
+	public String codigoHTML() {
+		return graficaPastel.codigoHTML();
+	}
+
+	@Override
+	public void imprimirCodigoHTML(BufferedWriter out) throws IOException {
+		graficaPastel.imprimirCodigoHTML(out);
 	}
 }
