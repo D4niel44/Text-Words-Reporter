@@ -2,6 +2,7 @@ package mx.unam.ciencias.edd.proyecto3.reportes;
 
 import java.util.Iterator;
 
+import mx.unam.ciencias.edd.Coleccion;
 import mx.unam.ciencias.edd.proyecto3.html.ContenidoHTML;
 import mx.unam.ciencias.edd.proyecto3.html.EtiquetaEmparejada;
 import mx.unam.ciencias.edd.proyecto3.html.EtiquetaSimple;
@@ -72,7 +73,8 @@ public class UtilReportes {
     }
 
     /**
-     * Genera el código html del encabezado 
+     * Genera el código html del encabezado
+     * 
      * @return Encabezado del documento.
      */
     public static ContenidoHTML encabezadoDocumento(String titulo, String ruta) {
@@ -108,6 +110,28 @@ public class UtilReportes {
         return division;
     }
 
+    public static ContenidoHTML reporteGraficas(ContenidoHTML grafica, String tituloGrafica) {
+        EtiquetaEmparejada division = UtilHTML.division("reporte_" + tituloGrafica.replaceAll(" ", ""), "Reporte");
+        division.agregarContenido(UtilHTML.h2(tituloGrafica));
+        division.agregarContenido(grafica);
+        return division;
+    }
+
+    public static ContenidoHTML reporteArboles(ContenidoHTML arbol, Coleccion<String[]> leyendas, String tituloArbol) {
+        String tituloSinEspacios = tituloArbol.replaceAll(" ", "");
+        EtiquetaEmparejada division = UtilHTML.division("reporte_" + tituloSinEspacios, "Reporte");
+        division.agregarContenido(UtilHTML.h2(tituloArbol));
+        // Subdivisión con el arbol
+        EtiquetaEmparejada subdivisionArbol = UtilHTML.division("arbol_" + tituloSinEspacios, "Arbol");
+        subdivisionArbol.agregarContenido(arbol);
+        division.agregarContenido(subdivisionArbol);
+        // Subdivisión con la leyenda del arbol.
+        EtiquetaEmparejada subdivisionLeyenda = UtilHTML.division("leyenda" + tituloSinEspacios, "leyenda");
+        subdivisionLeyenda.agregarContenido(tabla(leyendas)); // Crea una tabla con las leyendas.
+        division.agregarContenido(subdivisionLeyenda);
+        return division;
+    }
+
     private static ContenidoHTML tituloDocumento(String titulo) {
         EtiquetaEmparejada tituloDocumento = UtilHTML.h1(titulo);
         tituloDocumento.agregarAtributo("id", "Reporte_" + titulo);
@@ -122,5 +146,4 @@ public class UtilReportes {
         return enlace;
     }
 
-    
 }

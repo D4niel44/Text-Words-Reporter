@@ -1,9 +1,13 @@
 package mx.unam.ciencias.edd.proyecto3.reportes;
 
+import mx.unam.ciencias.edd.proyecto3.graficador.DibujarArbolAVL;
+import mx.unam.ciencias.edd.proyecto3.graficador.DibujarArbolRojinegro;
 import mx.unam.ciencias.edd.proyecto3.html.ContenidoHTML;
 import mx.unam.ciencias.edd.proyecto3.html.EtiquetaEmparejada;
 import mx.unam.ciencias.edd.proyecto3.html.HTML;
 import mx.unam.ciencias.edd.proyecto3.reportes.Archivo.PalabraContada;
+import mx.unam.ciencias.edd.proyecto3.svg.GraficaBarras;
+import mx.unam.ciencias.edd.proyecto3.svg.GraficaPastel;
 import mx.unam.ciencias.edd.Coleccion;
 import mx.unam.ciencias.edd.Lista;
 import mx.unam.ciencias.edd.MonticuloMinimo;
@@ -40,11 +44,15 @@ public class ReporteArchivo {
         html.agregarContenido(cuerpoHTML);
     }
 
+    /**
+     * Genera los reportes del archivo.
+     */
     public void generarReportes() {
         // variable para contar el total de repeticiones de palabras.
         int totalPalabras = 0;
         // Genera el reporte del conteo de las palabras
         Coleccion<String[]> elementos = new Lista<>();
+        elementos.agrega(new String[]{"Palabra", "repeticiones"}); // agrega los enunciados.
         for (Archivo.PalabraContada palabra : archivo) {
             int repeticionesPalabra = palabra.obtenerRepeticiones();
             totalPalabras += repeticionesPalabra;
@@ -53,25 +61,55 @@ public class ReporteArchivo {
         }
         cuerpoHTML.agregarContenido(UtilReportes.reporteConteo(elementos));
         // Genera los demas reportes.
+        // Coleccion para las leyendas de los arboles
+        Coleccion<String[]> leyendaArboles = new Lista<>();
+        leyendaArboles.agrega(new String[]{"Palabra", "Repeticiones"}); // Encabezados de la tabla de leyendas.
         MonticuloMinimo<PalabraContada> monticulo = archivo.monticuloPalabras();
         Coleccion<Archivo.PalabraContada> palabrasMasRepetidas = new Lista<>();
         // booleanos para controlar el ciclo while
         boolean faltaReporteGraficas = true;
-        boolean faltaReporteArboles = true;
         // SVG's de cada reporte
-        ContenidoHTML svgGraficaPastel = null;
-        ContenidoHTML svgGrafica = null;
-        ContenidoHTML svgArbolRojinegro = null;
-        ContenidoHTML svgArbolAVL = null;
+        ContenidoHTML graficaPastel = null;
+        ContenidoHTML graficaBarras = null;
+        ContenidoHTML arbolRojinegro = null;
+        ContenidoHTML arbolAVL = null;
         double porcientoAcumulado = 0.0;
-        while (faltaReporteArboles || faltaReporteGraficas) {
+        while (true) {
+            // Crea una nueva coleccion solo con las repeticiones de las palabras para
+            // construir los arboles.
+            Coleccion<Integer> repeticionesPalabras = new Lista<>();
             Archivo.PalabraContada palabra = monticulo.elimina();
-            porcientoAcumulado += ((double) palabra.obtenerRepeticiones()) / totalPalabras;
+            int repeticionesPalabra = palabra.obtenerRepeticiones();
+            porcientoAcumulado += ((double) repeticionesPalabra) / totalPalabras;
             palabrasMasRepetidas.agrega(palabra);
+            repeticionesPalabras.agrega(palabra.obtenerRepeticiones());
+            String[] entradaArbol = { palabra.obtenerPalabra(), Integer.toString(repeticionesPalabra) };
+            leyendaArboles.agrega(entradaArbol);
+            // Si no se ha generado el reporte y, ya no hay mas palabras en el archivo o se
+            // llega ha que se han tomado 8 elementos o que se ha tomado al menos el 95
+            // porciento del total de repeticiones genera las graficas de barras y de pastel
             if (faltaReporteGraficas && (monticulo.esVacia() || porcientoAcumulado >= 0.95
                     || palabrasMasRepetidas.getElementos() == 8)) {
-                // cambiar graficaPastel a estatica
+                graficaPastel = new GraficaPastel(400, palabrasMasRepetidas, totalPalabras, "Resto de palabras");
+                graficaBarras = new GraficaBarras(palabrasMasRepetidas, totalPalabras);
+                faltaReporteGraficas = false;
+            }
+            // Genera un arbol Rojinegro o un arbol AVL con las 15 palabras mas repetidas, o
+            // con todas las palabras en caso de haber menos de 15 en el archivo.
+            if (monticulo.esVacia() || palabrasMasRepetidas.getElementos() == 15) {
+                arbolRojinegro = new DibujarArbolRojinegro<>(repeticionesPalabras);
+                arbolAVL = new DibujarArbolAVL<>(repeticionesPalabras);
+                break; // rompe el ciclo, si ya se generaron los svg de los arboles también los de las
+                       // graficas.
             }
         }
+        cuerpoHTML.agregarContenido(
+                UtilReportes.reporteGraficas(graficaPastel, "Grafica de Pastel de las palabras mas usadas."));
+        cuerpoHTML.agregarContenido(
+                UtilReportes.reporteGraficas(graficaBarras, "Grafica de Barras de las palabras mas usadas."));
+        cuerpoHTML.agregarContenido(UtilReportes.reporteArboles(arbolRojinegro, leyendaArboles,
+                "Arbol Rojinegro de las palabras mas repetidas"));
+        cuerpoHTML.agregarContenido(
+                UtilReportes.reporteArboles(arbolAVL, leyendaArboles, "Arbol AVL de las palabras mas repetidas"));
     }
 }
