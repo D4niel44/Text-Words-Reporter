@@ -23,7 +23,7 @@ public class HTML {
      */
     public HTML(String idioma) {
         if (idioma == null)
-            throw new IllegalArgumentException("No se permiten valores null.");
+            throw new IllegalArgumentException("No se admiten parametros null.");
         etiquetaRaiz = new EtiquetaEmparejada("html");
         etiquetaRaiz.agregarAtributo("lang", "es");
     }
@@ -36,6 +36,17 @@ public class HTML {
      */
     public void agregarAtributo(String atributo, String valor) {
         etiquetaRaiz.agregarAtributo(atributo, valor);
+    }
+
+    /**
+     * Añade un contenido al html.
+     * @param contenido Contenido a agregar
+     * @throws IllegalArgumentException si el parametro contenido es <code>null</code>.
+     */
+    public void agregarContenido(ContenidoHTML contenido) {
+        if (contenido == null)
+            throw new IllegalArgumentException("No se admiten parametros null.");
+        etiquetaRaiz.agregarContenido(contenido);
     }
 
     /**
