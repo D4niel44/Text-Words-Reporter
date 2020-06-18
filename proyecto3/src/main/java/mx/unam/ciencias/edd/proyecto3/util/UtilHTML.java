@@ -64,6 +64,35 @@ public class UtilHTML {
     private UtilHTML() {
     }
 
+    public static EtiquetaEmparejada cabeza() {
+        return new EtiquetaEmparejada("head");
+    }
+
+    public static EtiquetaEmparejada titulo(String tituloPagina) {
+        if (tituloPagina == null)
+            throw new IllegalArgumentException("No se admiten parametros null.");
+        EtiquetaEmparejada titulo = new EtiquetaEmparejada("title");
+        titulo.agregarContenido(new TextoPlanoHTML(tituloPagina));
+        return titulo;
+    }
+
+    public static EtiquetaSimple enlaceHojaEstilo(String ruta) {
+        if (ruta == null)
+            throw new IllegalArgumentException("No se admiten parametros null.");
+        EtiquetaSimple enlace = new EtiquetaSimple("link");
+        enlace.agregarAtributo("rel", "stylesheet");
+        enlace.agregarAtributo("href", ruta);
+        return enlace;
+    }
+
+    public static EtiquetaSimple metaDatos() {
+        return new EtiquetaSimple("meta");
+    }
+
+    public static EtiquetaEmparejada cuerpo() {
+        return new EtiquetaEmparejada("body");
+    }
+
     public static EtiquetaEmparejada lista() {
         return new EtiquetaEmparejada("ul");
     }
@@ -97,13 +126,79 @@ public class UtilHTML {
         return a;
     }
 
-    public static EtiquetaSimple enlaceHojaEstilo(String ruta) {
-        if (ruta == null)
+    public static EtiquetaEmparejada division(String id, String clase) {
+        if (clase == null || id == null)
             throw new IllegalArgumentException("No se admiten parametros null.");
-        EtiquetaSimple enlace = new EtiquetaSimple("link");
-        enlace.agregarAtributo("rel", "stylesheet");
-        enlace.agregarAtributo("href", ruta);
-        return enlace;
+        EtiquetaEmparejada division = new EtiquetaEmparejada("div");
+        division.agregarAtributo("id", id);
+        division.agregarAtributo("clase", clase);
+        return division;
+    }
+
+    public static EtiquetaEmparejada h1() {
+        return new EtiquetaEmparejada("h1");
+    }
+
+    public static EtiquetaEmparejada h1(String contenido) {
+        if (contenido == null)
+            throw new IllegalArgumentException("No se admiten parametros null.");
+        return h("1", contenido);
+    }
+
+    public static EtiquetaEmparejada h2() {
+        return new EtiquetaEmparejada("h2");
+    }
+
+    public static EtiquetaEmparejada h2(String contenido) {
+        if (contenido == null)
+            throw new IllegalArgumentException("No se admiten parametros null.");
+        return h("2", contenido);
+    }
+
+    public static EtiquetaEmparejada h3() {
+        return new EtiquetaEmparejada("h3");
+    }
+
+    public static EtiquetaEmparejada h3(String contenido) {
+        if (contenido == null)
+            throw new IllegalArgumentException("No se admiten parametros null.");
+        return h("3", contenido);
+    }
+
+    public static EtiquetaEmparejada h4() {
+        return new EtiquetaEmparejada("h4");
+    }
+
+    public static EtiquetaEmparejada h4(String contenido) {
+        if (contenido == null)
+            throw new IllegalArgumentException("No se admiten parametros null.");
+        return h("4", contenido);
+    }
+
+    public static EtiquetaEmparejada h5() {
+        return new EtiquetaEmparejada("h5");
+    }
+
+    public static EtiquetaEmparejada h5(String contenido) {
+        if (contenido == null)
+            throw new IllegalArgumentException("No se admiten parametros null.");
+        return h("5", contenido);
+    }
+
+    public static EtiquetaEmparejada h6() {
+        return new EtiquetaEmparejada("h6");
+    }
+
+    public static EtiquetaEmparejada h6(String contenido) {
+        if (contenido == null)
+            throw new IllegalArgumentException("No se admiten parametros null.");
+        return h("6", contenido);
+    }
+
+    private static EtiquetaEmparejada h(String numero, String contenido) {
+        EtiquetaEmparejada h = new EtiquetaEmparejada("h" + numero);
+        h.agregarContenido(new TextoPlanoHTML(contenido));
+        return h;
     }
 
     public static ContenidoHTML textoPlano(String texto) {
