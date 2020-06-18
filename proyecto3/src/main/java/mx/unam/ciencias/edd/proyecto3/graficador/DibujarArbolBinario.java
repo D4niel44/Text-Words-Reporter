@@ -1,9 +1,13 @@
 package mx.unam.ciencias.edd.proyecto3.graficador;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 import mx.unam.ciencias.edd.ArbolBinario;
 import mx.unam.ciencias.edd.VerticeArbolBinario;
-import mx.unam.ciencias.edd.proyecto3.svg.SVG;
+import mx.unam.ciencias.edd.proyecto3.html.ContenidoHTML;
 import mx.unam.ciencias.edd.proyecto3.svg.ColorSVG;
+import mx.unam.ciencias.edd.proyecto3.svg.SVG;
 import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 
 /**
@@ -11,7 +15,7 @@ import mx.unam.ciencias.edd.proyecto3.util.Pareja;
  * 
  * @param <T> Tipo de la gráfica.
  */
-public abstract class DibujarArbolBinario<T> implements GraficableSVG {
+public abstract class DibujarArbolBinario<T> implements GraficableSVG, ContenidoHTML {
 
     protected ArbolBinario<T> arbolBinario;
 
@@ -19,26 +23,51 @@ public abstract class DibujarArbolBinario<T> implements GraficableSVG {
      * Crea un nuevo arbol binario dibujable.
      * 
      * @param arbol Arbol Binario a graficar
+     * @throws IllegalArgumentException Si el arbol es nulo o no tiene elementos.
      */
     public DibujarArbolBinario(ArbolBinario<T> arbol) {
+        if (arbol == null || arbol.esVacia())
+            throw new IllegalArgumentException("El arbol no puede ser null y debe contener elementos.");
         arbolBinario = arbol;
     }
 
     /**
-     * Genera un SVG del arbol Binario.
-     * 
-     * @return Una cadena con el código fuente del SVG generado.
+     * Imprime el SVG del árbol Binario en la salida Estándar.
      */
     @Override
-    public String graficarSVG() {
-        if (arbolBinario.esVacia())
-            return "";
+    public void graficarSVG() {
+        generarSVG().imprimirSVG();
+    }
+
+    /**
+     * Regresa codigo html con el SVG del arbol.
+     * 
+     * @return Codigo html con el SVG del arbol.
+     */
+    @Override
+    public String codigoHTML() {
+        return generarSVG().codigoHTML();
+    }
+
+    /**
+     * Imprime le codigo HTML del arbol en el Buffer pasado como parametro.
+     * 
+     * @param out Buffer donde se va a escribir el codigo html con una
+     *            representación del arbol
+     */
+    @Override
+    public void imprimirCodigoHTML(BufferedWriter out) throws IOException {
+        generarSVG().imprimirCodigoHTML(out);
+    }
+
+    /* genera un SVG del arbol Binario */
+    private SVG generarSVG() {
         double diametro = 30;
         double largo = diametro * arbolBinario.getElementos() * 2;
         double ancho = diametro * (arbolBinario.getElementos() + 2);
         SVG svg = new SVG(largo, ancho);
         graficarAuxiliar(arbolBinario.raiz(), Pareja.crearPareja((ancho) / 2, diametro), svg, diametro / 2, ancho / 2);
-        return svg.toString();
+        return svg;
     }
 
     /* Método auxiliar para graficar arboles binarios. */

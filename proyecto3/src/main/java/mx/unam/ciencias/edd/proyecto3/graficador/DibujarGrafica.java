@@ -4,8 +4,12 @@ import mx.unam.ciencias.edd.Coleccion;
 import mx.unam.ciencias.edd.Grafica;
 import mx.unam.ciencias.edd.Color;
 import mx.unam.ciencias.edd.VerticeGrafica;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.Iterator;
 import mx.unam.ciencias.edd.proyecto3.svg.SVG;
+import mx.unam.ciencias.edd.proyecto3.html.ContenidoHTML;
 import mx.unam.ciencias.edd.proyecto3.svg.ColorSVG;
 import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 
@@ -14,7 +18,7 @@ import mx.unam.ciencias.edd.proyecto3.util.Pareja;
  * 
  * @param <T> Tipo de la gráfica.
  */
-public class DibujarGrafica<T> implements GraficableSVG {
+public class DibujarGrafica<T> implements GraficableSVG, ContenidoHTML {
 
     private Grafica<Pareja<T, Pareja<Double, Double>>> grafica;
 
@@ -49,7 +53,29 @@ public class DibujarGrafica<T> implements GraficableSVG {
      * @return Una cadena con el código fuente del SVG generado.
      */
     @Override
-    public String graficarSVG() {
+    public void graficarSVG() {
+        generarSVG().imprimirSVG();
+    }
+
+    /**
+     * Genera codigo html con una representación de la Gráfica.
+     * @return representación de la gráfica como código html.
+     */
+    @Override
+    public String codigoHTML() {
+        return generarSVG().codigoHTML();
+    }
+
+    /**
+     * Genera codigo html con una representación de la Gráfica y lo escribe en el buffer pasado com parametro.
+     * @param out Bufer en el cual escribe el codigo html.
+     */
+    @Override
+    public void imprimirCodigoHTML(BufferedWriter out) throws IOException {
+        generarSVG().imprimirCodigoHTML(out);
+    }
+
+    private SVG generarSVG() {
         double radioVertice = 15;
         double diametroM = (grafica.getElementos() * radioVertice * 4.5) / Math.PI;
         double largo = diametroM + radioVertice * 4;
@@ -74,7 +100,7 @@ public class DibujarGrafica<T> implements GraficableSVG {
             svg.circuloConTexto(puntoVertice, radioVertice, ColorSVG.BLACK, ColorSVG.WHITE, ColorSVG.BLACK,
                     elemento.getX().toString());
         }
-        return svg.toString();
+        return svg;
     }
 
     private void cambiarPunto(Pareja<Double, Double> punto, double largo, double ancho, double diametro, double angulo,
