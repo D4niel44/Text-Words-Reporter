@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import mx.unam.ciencias.edd.proyecto3.html.ContenidoHTML;
 import mx.unam.ciencias.edd.proyecto3.html.EtiquetaEmparejada;
+import mx.unam.ciencias.edd.proyecto3.html.EtiquetaSimple;
 import mx.unam.ciencias.edd.proyecto3.util.UtilHTML;
 
 public class UtilReportes {
@@ -41,7 +42,7 @@ public class UtilReportes {
      * @param datos Datos de la tabla.
      * @return Una tabla html con los datos.
      */
-    public static ContenidoHTML tabla(Iterable<String[]> datos) {
+    private static ContenidoHTML tabla(Iterable<String[]> datos) {
         if (datos == null)
             throw new IllegalArgumentException("No se permiten parámetros null.");
         EtiquetaEmparejada tabla = UtilHTML.tabla();
@@ -69,4 +70,57 @@ public class UtilReportes {
         }
         return tabla;
     }
+
+    /**
+     * Genera el código html del encabezado 
+     * @return Encabezado del documento.
+     */
+    public static ContenidoHTML encabezadoDocumento(String titulo, String ruta) {
+        EtiquetaEmparejada cabezaDocumento = UtilHTML.cabeza();
+        // Define la codificación UTF-8 como la codificación del documento.
+        EtiquetaSimple codificado = UtilHTML.metaDatos();
+        codificado.agregarAtributo("charset", "UTF-8");
+        cabezaDocumento.agregarContenido(codificado);
+        // Define el view-port del documento.
+        EtiquetaSimple puerto = UtilHTML.metaDatos();
+        puerto.agregarAtributo("name", "viewport");
+        puerto.agregarAtributo("content", "width=device-width, initial-scale=1.0");
+        cabezaDocumento.agregarContenido(puerto);
+        // Añade una hoja de estilo al documento.
+        cabezaDocumento.agregarContenido(UtilHTML.enlaceHojaEstilo(ruta));
+        // añade el título del documento
+        cabezaDocumento.agregarContenido(UtilHTML.titulo(titulo));
+        return cabezaDocumento;
+    }
+
+    public static EtiquetaEmparejada cuerpoDocumento(String titulo, String rutaPadre) {
+        EtiquetaEmparejada cuerpo = UtilHTML.cuerpo();
+        cuerpo.agregarContenido(tituloDocumento(titulo));
+        if (rutaPadre != null)
+            cuerpo.agregarContenido(enlaceArchivoPadre(rutaPadre));
+        return cuerpo;
+    }
+
+    public static ContenidoHTML reporteConteo(Iterable<String[]> datos) {
+        EtiquetaEmparejada division = UtilHTML.division("reporteConteoPalabras", "Reporte");
+        division.agregarContenido(UtilHTML.h2("Conteo de Palabras"));
+        division.agregarContenido(tabla(datos));
+        return division;
+    }
+
+    private static ContenidoHTML tituloDocumento(String titulo) {
+        EtiquetaEmparejada tituloDocumento = UtilHTML.h1(titulo);
+        tituloDocumento.agregarAtributo("id", "Reporte_" + titulo);
+        return tituloDocumento;
+    }
+
+    private static ContenidoHTML enlaceArchivoPadre(String rutaPadre) {
+        EtiquetaEmparejada archivoPadre = UtilHTML.h2();
+        archivoPadre.agregarAtributo("id", "enlaceArchivoPadre");
+        EtiquetaEmparejada enlace = UtilHTML.enlace(rutaPadre, "Reporte General");
+        archivoPadre.agregarContenido(enlace);
+        return enlace;
+    }
+
+    
 }

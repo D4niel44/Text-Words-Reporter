@@ -1,6 +1,6 @@
 package mx.unam.ciencias.edd.proyecto3.svg;
 
-import mx.unam.ciencias.edd.Coleccion;
+import mx.unam.ciencias.edd.proyecto3.reportes.Archivo;
 import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 
 /**
@@ -21,19 +21,20 @@ public class GraficaBarras {
 	 *                  elemento de la pareja al valor de dicha etiqueta
 	 * @param total     Valor total a partir del cuál se va a sacar el porcentaje de
 	 *                  valor de cada etiqueta.
+     * @param totalElementos Total de elementos en el iterable
 	 */
-    public GraficaBarras(Coleccion<Pareja<String, Number>> elementos, double total) {
+    public GraficaBarras(Iterable<Archivo.PalabraContada> elementos, double totalElementos, double total) {
         // Crea un nuevo svg con ancho relativo al número de elementos en la colección y
         // con largo 3/4 partes respecto al ancho
-        double ancho = elementos.getElementos() * 35 + 15;
+        double ancho = totalElementos * 35 + 15;
         double largo = 3 / 4 * ancho;
         graficaBarras = new SVG(largo + 20, ancho + 5);
         // Crea un nuevo gráfico con clase barChart
         graficaBarras.crearGrafico("barChart");
         // Añade la barra correspondiente a cada elemento al gráfico de Barras.
         double posicionX = 20; // posición correspondiente a la x inicial de la barra del elemento.
-        for (Pareja<String, Number> elemento : elementos) {
-            double valorElemento = elemento.getY().doubleValue();
+        for (Archivo.PalabraContada elemento : elementos) {
+            double valorElemento = elemento.obtenerRepeticiones();
             double largoBarra = (valorElemento / total) * largo;
             double posicionY = 10 + largo - largoBarra;
             // Añade el rectángulo correspondiente a la barra del elemento al SVG.
@@ -41,7 +42,7 @@ public class GraficaBarras {
             // Añade los textos que describen la barra
             graficaBarras.texto(Pareja.crearPareja(posicionX + 10, posicionY - 2), ColorSVG.BLACK, 8.0,
                     String.format("%.2f", valorElemento)); // valor que representa la barra
-            graficaBarras.texto(Pareja.crearPareja(posicionX + 10, largo + 12), ColorSVG.BLACK, 8.0, elemento.getX()); // Identificador
+            graficaBarras.texto(Pareja.crearPareja(posicionX + 10, largo + 12), ColorSVG.BLACK, 8.0, elemento.obtenerPalabra()); // Identificador
             posicionX += 35;
         }
         // Dibuja los ejes de la gráfica de barras
@@ -51,6 +52,7 @@ public class GraficaBarras {
 
     /**
      * Representación en cadena de la Gráfica de Barras.
+     * 
      * @return Cadena con el código SVG correspondiente a la gráfica de barras.
      */
     @Override

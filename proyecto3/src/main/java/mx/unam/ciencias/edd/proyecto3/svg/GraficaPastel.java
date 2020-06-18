@@ -1,6 +1,6 @@
 package mx.unam.ciencias.edd.proyecto3.svg;
 
-import mx.unam.ciencias.edd.Coleccion;
+import mx.unam.ciencias.edd.proyecto3.reportes.Archivo;
 import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 
 /**
@@ -16,20 +16,24 @@ public class GraficaPastel {
 	/**
 	 * Crea una gráfica de pastel a partir de los datos introducidos.
 	 * 
-	 * @param diametro  Diámetro de la gráfica de pastel.
-	 * @param elementos Colección de elementos de la gráfica de pastel, donde cada
-	 *                  elemento es una pareja correspondiendo el primer elemento de
-	 *                  la pareja a la etiqueta del elemento a graficar y el segundo
-	 *                  elemento de la pareja al valor de dicha etiqueta
-	 * @param total     Valor total a partir del cuál se va a sacar el porcentaje de
-	 *                  valor de cada etiqueta.
-	 * @param otros     Etiqueta con la cuál se representará el porcentaje no
-	 *                  cubierto por ninguno de los elementos, <code>null</code> si
-	 *                  no desea que se represente el porcentaje restante con
-	 *                  ninguna etiqueta en la leyenda (se representará de igual
-	 *                  manera en la lista con color gris).
+	 * @param diametro       Diámetro de la gráfica de pastel.
+	 * @param elementos      Colección de elementos de la gráfica de pastel, donde
+	 *                       cada elemento es una pareja correspondiendo el primer
+	 *                       elemento de la pareja a la etiqueta del elemento a
+	 *                       graficar y el segundo elemento de la pareja al valor de
+	 *                       dicha etiqueta
+	 * @param total          Valor total a partir del cuál se va a sacar el
+	 *                       porcentaje de valor de cada etiqueta.
+	 * @param totalElementos Total de elementos en el iterable.
+	 * @param otros          Etiqueta con la cuál se representará el porcentaje no
+	 *                       cubierto por ninguno de los elementos,
+	 *                       <code>null</code> si no desea que se represente el
+	 *                       porcentaje restante con ninguna etiqueta en la leyenda
+	 *                       (se representará de igual manera en la lista con color
+	 *                       gris).
 	 */
-	public GraficaPastel(double diametro, Coleccion<Pareja<String, Number>> elementos, double total, String otros) {
+	public GraficaPastel(double diametro, Iterable<Archivo.PalabraContada> elementos, double totalElementos,
+			double total, String otros) {
 		graficaPastel = new SVG(diametro, diametro * 2);
 		// Genera la gráfica de pastel
 		graficaPastel.crearGrafico("pieChart"); // crea un <g> con clase pieChart
@@ -38,15 +42,14 @@ public class GraficaPastel {
 		double x = centro;
 		double y = 0;
 		CreadorCamino rebanada = new CreadorCamino();
-		int totalElementos = elementos.getElementos();
 		if (otros != null)
 			totalElementos += 2;
 		double anchoRectangulo = (2 * totalElementos + 1) / diametro;
 		// Dibuja la rebanada correspondiente al resto de los elementos.
 		graficaPastel.circulo(Pareja.crearPareja(centro, centro), centro, ColorSVG.NINGUNO, ColorSVG.GRAY);
-		for (Pareja<String, Number> pareja : elementos) {
+		for (Archivo.PalabraContada palabra : elementos) {
 			// Grafica la rebanada del elemento.
-			double porciento = pareja.getY().doubleValue() / total;
+			double porciento = palabra.obtenerRepeticiones() / total;
 			double finalX = x + Math.cos(porciento * 2 * Math.PI);
 			double finalY = y + Math.sin(porciento * 2 * Math.PI);
 			ColorSVG colorElemento = COLORES[i % 9];
@@ -59,7 +62,7 @@ public class GraficaPastel {
 			graficaPastel.rectangulo(Pareja.crearPareja(diametro + 10, j * anchoRectangulo), anchoRectangulo,
 					anchoRectangulo, colorElemento);
 			graficaPastel.texto(Pareja.crearPareja(diametro + 10, (j + 0.5) * anchoRectangulo), ColorSVG.BLACK,
-					anchoRectangulo, pareja.getX());
+					anchoRectangulo, palabra.obtenerPalabra());
 			i++;
 			j += 2;
 		}
