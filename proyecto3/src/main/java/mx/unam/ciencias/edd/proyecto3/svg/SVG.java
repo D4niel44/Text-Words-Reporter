@@ -1,11 +1,15 @@
 package mx.unam.ciencias.edd.proyecto3.svg;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+
+import mx.unam.ciencias.edd.proyecto3.html.ContenidoHTML;
 import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 
 /**
  * Clase con varios métodos útiles para graficar un SVG.
  */
-public class SVG {
+public class SVG implements ContenidoHTML {
 
     private StringBuilder svg;
     public final double largo, ancho;
@@ -220,5 +224,15 @@ public class SVG {
             indentacion.append("    ");
         }
         return indentacion.toString();
+    }
+
+    @Override
+    public String codigoHTML() {
+        return toString();
+    }
+
+    @Override
+    public void imprimirCodigoHTML(BufferedWriter out) throws IOException {
+        out.write(toString());
     }
 }
