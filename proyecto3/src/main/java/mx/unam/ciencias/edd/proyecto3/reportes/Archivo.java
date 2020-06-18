@@ -74,6 +74,11 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 		public void setIndice(int indice) {
 			this.indice = indice;
 		}
+
+		@Override
+		public String toString() {
+			return palabra;
+		}
 	}
 
 	private class Iterador implements Iterator<PalabraContada> {
@@ -121,9 +126,14 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 
 	/* Diccionario con las palabras del archivo. */
 	private Diccionario<CadenaNormalizada, Integer> palabras;
+	private String nombre;
+	private int identificador;
 
-	public Archivo(File archivo) throws FileNotFoundException, IOException {
+	public Archivo(File archivo, int identificador) throws FileNotFoundException, IOException {
 		palabras = new Diccionario<>();
+		// Establece el nombre del archivo como el nombre que posee en el sistema quitandole la extensión.
+		nombre = archivo.getName().substring(0, archivo.getName().indexOf('.'));
+		this.identificador = identificador;
 		try (LectorPalabra in = new LectorPalabra(archivo)) {
 			String palabra = in.leePalabra();
 			while (palabra != null) {
@@ -154,5 +164,13 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 	@Override
 	public Iterator<Archivo.PalabraContada> iterator() {
 		return new Iterador();
+	}
+
+	public String obtenerNombre() {
+		return nombre;
+	}
+
+	public int obtenerIdentificador() {
+		return identificador;
 	}
 }

@@ -36,8 +36,9 @@ public class ReporteArchivo {
         if (archivo == null || ruta == null || tituloReporte == null)
             throw new IllegalArgumentException("Los parametros archivo, ruta y tituloReporte no pueden ser null.");
         if (archivo.totalPalabras() == 0) {
+            // Excepcion propia.
         }
-        // Excepcion propia.
+        this.archivo = archivo;
         html = new HTML();
         html.agregarContenido(UtilReportes.encabezadoDocumento(tituloReporte, ruta));
         cuerpoHTML = UtilReportes.cuerpoDocumento(tituloReporte, rutaPadre);
@@ -107,9 +108,9 @@ public class ReporteArchivo {
                 UtilReportes.reporteGraficas(graficaPastel, "Grafica de Pastel de las palabras mas usadas."));
         cuerpoHTML.agregarContenido(
                 UtilReportes.reporteGraficas(graficaBarras, "Grafica de Barras de las palabras mas usadas."));
-        cuerpoHTML.agregarContenido(UtilReportes.reporteArboles(arbolRojinegro, leyendaArboles,
+        cuerpoHTML.agregarContenido(UtilReportes.reporteGraficoConLeyenda(arbolRojinegro, leyendaArboles,
                 "Arbol Rojinegro de las palabras mas repetidas"));
         cuerpoHTML.agregarContenido(
-                UtilReportes.reporteArboles(arbolAVL, leyendaArboles, "Arbol AVL de las palabras mas repetidas"));
+                UtilReportes.reporteGraficoConLeyenda(arbolAVL, leyendaArboles, "Arbol AVL de las palabras mas repetidas"));
     }
 }

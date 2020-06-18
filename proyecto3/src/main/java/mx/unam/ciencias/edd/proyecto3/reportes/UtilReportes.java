@@ -3,6 +3,7 @@ package mx.unam.ciencias.edd.proyecto3.reportes;
 import java.util.Iterator;
 
 import mx.unam.ciencias.edd.Coleccion;
+import mx.unam.ciencias.edd.Lista;
 import mx.unam.ciencias.edd.proyecto3.html.ContenidoHTML;
 import mx.unam.ciencias.edd.proyecto3.html.EtiquetaEmparejada;
 import mx.unam.ciencias.edd.proyecto3.html.EtiquetaSimple;
@@ -117,18 +118,33 @@ public class UtilReportes {
         return division;
     }
 
-    public static ContenidoHTML reporteArboles(ContenidoHTML arbol, Coleccion<String[]> leyendas, String tituloArbol) {
-        String tituloSinEspacios = tituloArbol.replaceAll(" ", "");
+    public static ContenidoHTML reporteGraficoConLeyenda(ContenidoHTML grafico, Iterable<String[]> leyendas, String titulo) {
+        String tituloSinEspacios = titulo.replaceAll(" ", "");
         EtiquetaEmparejada division = UtilHTML.division("reporte_" + tituloSinEspacios, "Reporte");
-        division.agregarContenido(UtilHTML.h2(tituloArbol));
-        // Subdivisión con el arbol
-        EtiquetaEmparejada subdivisionArbol = UtilHTML.division("arbol_" + tituloSinEspacios, "Arbol");
-        subdivisionArbol.agregarContenido(arbol);
+        division.agregarContenido(UtilHTML.h2(titulo));
+        // Subdivisión con el gráfico
+        EtiquetaEmparejada subdivisionArbol = UtilHTML.division("grafico_" + tituloSinEspacios, "grafico");
+        subdivisionArbol.agregarContenido(grafico);
         division.agregarContenido(subdivisionArbol);
-        // Subdivisión con la leyenda del arbol.
+        // Subdivisión con la leyenda.
         EtiquetaEmparejada subdivisionLeyenda = UtilHTML.division("leyenda" + tituloSinEspacios, "leyenda");
         subdivisionLeyenda.agregarContenido(tabla(leyendas)); // Crea una tabla con las leyendas.
         division.agregarContenido(subdivisionLeyenda);
+        return division;
+    }
+
+    public static ContenidoHTML reporteTotalPalabras(Archivo[] archivos) {
+        Coleccion<String[]> coleccionArchivos = new Lista<>();
+        coleccionArchivos.agrega(new String[] { "nombre", "total de palabras" });
+        for (int i = 0; i < archivos.length; i++) {
+            Archivo archivo = archivos[i];
+            String nombreArchivo = archivo.obtenerNombre();
+            EtiquetaEmparejada enlace = UtilHTML.enlace(nombreArchivo + ".html", nombreArchivo);
+            coleccionArchivos.agrega(new String[] { enlace.codigoHTML(), Integer.toString(archivo.totalPalabras()) });
+        }
+        EtiquetaEmparejada division = UtilHTML.division("reporteNombreArchivos", "Reporte");
+        division.agregarContenido(UtilHTML.h2("Archivos"));
+        division.agregarContenido(tabla(coleccionArchivos));
         return division;
     }
 
