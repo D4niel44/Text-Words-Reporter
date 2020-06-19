@@ -9,7 +9,9 @@ public class ExcepcionArgumentoInvalido extends RuntimeException {
     /**
      * Constructor que no recibe parámetros
      */
-    public ExcepcionArgumentoInvalido() {}
+    public ExcepcionArgumentoInvalido() {
+        super();
+    }
 
     /**
      * Constructor que recibe un mensaje.

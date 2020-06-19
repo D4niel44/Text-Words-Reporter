@@ -1,4 +1,4 @@
-package mx.unam.ciencias.edd.proyecto3.excpeciones;
+package mx.unam.ciencias.edd.proyecto3.excepciones;
 
 /**
  * Excepcion que se lanza cuando se pasa una bandera inválida al programa
@@ -8,7 +8,9 @@ public class ExcepcionBanderaInvalida extends RuntimeException {
     /**
      * Constructor que no recibe parámetros
      */
-    public ExcepcionBanderaInvalida() {}
+    public ExcepcionBanderaInvalida() {
+        super();
+    }
 
     /**
      * Constructor que recibe un mensaje.
