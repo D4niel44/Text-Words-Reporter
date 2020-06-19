@@ -15,7 +15,8 @@ public class App {
 			Reportador app = new Reportador(args);
 			app.ejecutar();
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			e.printStackTrace();
+			//System.err.println(e.getMessage());
 		}
 	}
 }

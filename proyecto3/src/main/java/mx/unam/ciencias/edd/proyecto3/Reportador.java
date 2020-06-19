@@ -154,7 +154,7 @@ public class Reportador {
 					if (siguiente >= argumentos.length)
 						throw new ExcepcionArgumentoInvalido("La opcion 'o' debe recibir un argumento.");
 					directorioDestino = new File(argumentos[siguiente]);
-					if (!directorioDestino.isDirectory())
+					if (directorioDestino.isFile())
 						throw new ExcepcionArgumentoInvalido(directorioDestino.getName() + " no es un directorio.");
 					procesados++;
 					break;

@@ -33,14 +33,14 @@ public class LectorPalabra implements Closeable {
 				break;
 			}
 			/* Maneja los caracteres de control */
-			if (Character.toString((char) c).matches("\\p{Cntrl}")) {
+			if (Character.toString((char) c).matches("[\\p{Cntrl}\\x20]")) {
 				// si ya se empezó a leer la palabra se termina de leer, si no se continua a leer el
 				// siguiente caracter
 				if (s.length() != 0) {
 					break;
 				}
 			} else {
-				s.append(c);
+				s.append((char) c);
 			}
 		}
 		return s.toString();

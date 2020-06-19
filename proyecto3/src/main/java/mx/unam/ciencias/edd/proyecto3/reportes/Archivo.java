@@ -132,7 +132,12 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 	public Archivo(File archivo, int identificador) throws FileNotFoundException, IOException {
 		palabras = new Diccionario<>();
 		// Establece el nombre del archivo como el nombre que posee en el sistema quitandole la extensión.
-		nombre = archivo.getName().substring(0, archivo.getName().indexOf('.'));
+		String nombreArchivo = archivo.getName();
+		int indiceInicioExtension = nombreArchivo.indexOf('.');
+		if (indiceInicioExtension == -1)
+			nombre = nombreArchivo;
+		else
+			nombre = nombreArchivo.substring(0, indiceInicioExtension);
 		this.identificador = identificador;
 		try (LectorPalabra in = new LectorPalabra(archivo)) {
 			String palabra = in.leePalabra();

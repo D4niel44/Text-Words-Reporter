@@ -60,6 +60,7 @@ public class UtilReportes {
             encabezado.agregarContenido(UtilHTML.textoPlano(encabezados[i]));
             filaEncabezados.agregarContenido(encabezado);
         }
+        tabla.agregarContenido(filaEncabezados);
         // agrega los demás datos a la tabla
         while (iteradorDatos.hasNext()) {
             String[] filaDatos = iteradorDatos.next();
@@ -69,6 +70,7 @@ public class UtilReportes {
                 entrada.agregarContenido(UtilHTML.textoPlano(filaDatos[i]));
                 fila.agregarContenido(entrada);
             }
+            tabla.agregarContenido(fila);
         }
         return tabla;
     }

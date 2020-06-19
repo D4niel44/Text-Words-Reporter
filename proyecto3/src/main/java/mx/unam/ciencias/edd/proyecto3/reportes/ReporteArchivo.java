@@ -85,10 +85,10 @@ public class ReporteArchivo {
         ContenidoHTML arbolRojinegro = null;
         ContenidoHTML arbolAVL = null;
         double porcientoAcumulado = 0.0;
+        Coleccion<Integer> repeticionesPalabras = new Lista<>();
         while (true) {
             // Crea una nueva coleccion solo con las repeticiones de las palabras para
             // construir los arboles.
-            Coleccion<Integer> repeticionesPalabras = new Lista<>();
             Archivo.PalabraContada palabra = monticulo.elimina();
             int repeticionesPalabra = palabra.obtenerRepeticiones();
             porcientoAcumulado += ((double) repeticionesPalabra) / totalPalabras;
