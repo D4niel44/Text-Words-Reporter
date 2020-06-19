@@ -1,5 +1,6 @@
 package mx.unam.ciencias.edd.proyecto3.reportes;
 
+import mx.unam.ciencias.edd.proyecto3.excepciones.ExcepcionArchivoVacio;
 import mx.unam.ciencias.edd.proyecto3.graficador.DibujarArbolAVL;
 import mx.unam.ciencias.edd.proyecto3.graficador.DibujarArbolRojinegro;
 import mx.unam.ciencias.edd.proyecto3.html.ContenidoHTML;
@@ -31,12 +32,14 @@ public class ReporteArchivo {
      * @param tituloReporte Titulo del reporte.
      * @param ruta          Ruta del archivo CSS con el estilo del html
      * @param rutaPadre     Ruta de un html al cual crear un enlace desde este.
+     * @throws IllegalArgumentException Si se le pasa algun parametro (excepto rutaPadre) como parametro.
+     * @throws ExcepcionArchivoVacio Si se intenta instanciar un objeto a partir de un archivo sin palabras.
      */
-    public ReporteArchivo(Archivo archivo, String tituloReporte, String ruta, String rutaPadre) {
+    public ReporteArchivo(Archivo archivo, String tituloReporte, String ruta, String rutaPadre) throws ExcepcionArchivoVacio {
         if (archivo == null || ruta == null || tituloReporte == null)
             throw new IllegalArgumentException("Los parametros archivo, ruta y tituloReporte no pueden ser null.");
         if (archivo.totalPalabras() == 0) {
-            // Excepcion propia.
+            throw new ExcepcionArchivoVacio("No se pueden crear reportes a partir de archivos vacíos.");
         }
         this.archivo = archivo;
         html = new HTML();
