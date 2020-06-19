@@ -44,39 +44,43 @@ public class GraficaPastel implements ContenidoHTML {
 		graficaPastel.crearGrafico("pieChart"); // crea un <g> con clase pieChart
 		int i = 0, j = 1;
 		final double centro = diametro / 2;
-		double x = centro;
-		double y = 0;
-		CreadorCamino rebanada = new CreadorCamino();
+		double x = diametro;
+		double y = centro;
 		double totalElementos = elementos.getElementos();
 		if (otros != null)
 			totalElementos += 2;
-		double anchoRectangulo = (2 * totalElementos + 1) / diametro;
+		double anchoRectangulo = diametro / (2 * totalElementos + 1);
 		// Dibuja la rebanada correspondiente al resto de los elementos.
 		graficaPastel.circulo(Pareja.crearPareja(centro, centro), centro, ColorSVG.NINGUNO, ColorSVG.GRAY);
+		double anguloAcumulado = 0;
 		for (Archivo.PalabraContada palabra : elementos) {
+			CreadorCamino rebanada = new CreadorCamino();
 			// Grafica la rebanada del elemento.
 			double porciento = palabra.obtenerRepeticiones() / total;
-			double finalX = x + Math.cos(porciento * 2 * Math.PI);
-			double finalY = y + Math.sin(porciento * 2 * Math.PI);
+			double anguloRebanada = porciento * 2 * Math.PI;
+			double finalX = centro + centro * Math.cos(anguloAcumulado + anguloRebanada);
+			double finalY = centro - centro * Math.sin(anguloAcumulado + anguloRebanada);
 			ColorSVG colorElemento = COLORES[i % 8];
+			int aux = (porciento >= total / 2) ? 1 : 0;
 			graficaPastel.camino(rebanada.puntoInicio(x, y)
-					.arco(centro, centro, 0, (porciento >= total / 2) ? 1 : 0, 1, finalX, finalY).cerrarSubcamino()
+					.arco(centro, centro, 0, aux, aux, finalX, finalY).linea(200, 200)
 					.colorRelleno(colorElemento).colorBorde(colorElemento).anchoLinea(1));
 			x = finalX;
 			y = finalY;
 			// genera la leyenda del elemento
-			graficaPastel.rectangulo(Pareja.crearPareja(diametro + 10, j * anchoRectangulo), anchoRectangulo,
-					anchoRectangulo, colorElemento);
-			graficaPastel.texto(Pareja.crearPareja(diametro + 10, (j + 0.5) * anchoRectangulo), ColorSVG.BLACK,
+			graficaPastel.rectangulo(Pareja.crearPareja(diametro + 20, j * anchoRectangulo), anchoRectangulo,
+					anchoRectangulo, colorElemento, colorElemento);
+			graficaPastel.texto(Pareja.crearPareja(diametro * 1.5 + 10, (j + 0.5) * anchoRectangulo + 5), ColorSVG.BLACK,
 					anchoRectangulo, palabra.obtenerPalabra());
 			i++;
 			j += 2;
+			anguloAcumulado += anguloRebanada;
 		}
 		// Genera la leyenda para el porcentaje sobrante.
 		if (otros != null) {
-			graficaPastel.rectangulo(Pareja.crearPareja(diametro + 10, j * anchoRectangulo), anchoRectangulo,
-					anchoRectangulo, ColorSVG.GRAY);
-			graficaPastel.texto(Pareja.crearPareja(diametro + 10, (j + 0.5) * anchoRectangulo), ColorSVG.BLACK,
+			graficaPastel.rectangulo(Pareja.crearPareja(diametro + 20, j * anchoRectangulo), anchoRectangulo,
+					anchoRectangulo, ColorSVG.GRAY, ColorSVG.GRAY);
+			graficaPastel.texto(Pareja.crearPareja(diametro * 1.5 + 10, (j + 0.5) * anchoRectangulo + 5), ColorSVG.BLACK,
 					anchoRectangulo, otros);
 		}
 	}
