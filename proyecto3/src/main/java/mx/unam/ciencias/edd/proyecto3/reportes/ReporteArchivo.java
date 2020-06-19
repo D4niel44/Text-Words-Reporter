@@ -40,13 +40,9 @@ public class ReporteArchivo {
      * @throws ExcepcionArchivoVacio    Si se intenta instanciar un objeto a partir
      *                                  de un archivo sin palabras.
      */
-    public ReporteArchivo(Archivo archivo, String tituloReporte, String ruta, String rutaPadre)
-            throws ExcepcionArchivoVacio {
+    public ReporteArchivo(Archivo archivo, String tituloReporte, String ruta, String rutaPadre) {
         if (archivo == null || ruta == null || tituloReporte == null)
             throw new IllegalArgumentException("Los parametros archivo, ruta y tituloReporte no pueden ser null.");
-        if (archivo.totalPalabras() == 0) {
-            throw new ExcepcionArchivoVacio("No se pueden crear reportes a partir de archivos vacíos.");
-        }
         this.archivo = archivo;
         html = new HTML();
         html.agregarContenido(UtilReportes.encabezadoDocumento(tituloReporte, ruta));
