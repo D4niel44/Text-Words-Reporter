@@ -1,5 +1,11 @@
 package mx.unam.ciencias.edd.proyecto3.reportes;
 
+import java.io.IOException;
+import java.io.Writer;
+
+import mx.unam.ciencias.edd.Coleccion;
+import mx.unam.ciencias.edd.Lista;
+import mx.unam.ciencias.edd.MonticuloMinimo;
 import mx.unam.ciencias.edd.proyecto3.excepciones.ExcepcionArchivoVacio;
 import mx.unam.ciencias.edd.proyecto3.graficador.DibujarArbolAVL;
 import mx.unam.ciencias.edd.proyecto3.graficador.DibujarArbolRojinegro;
@@ -9,9 +15,6 @@ import mx.unam.ciencias.edd.proyecto3.html.HTML;
 import mx.unam.ciencias.edd.proyecto3.reportes.Archivo.PalabraContada;
 import mx.unam.ciencias.edd.proyecto3.svg.GraficaBarras;
 import mx.unam.ciencias.edd.proyecto3.svg.GraficaPastel;
-import mx.unam.ciencias.edd.Coleccion;
-import mx.unam.ciencias.edd.Lista;
-import mx.unam.ciencias.edd.MonticuloMinimo;
 
 /**
  * Clase para generar reportes de las palabras que contiene un archivo de texto.
@@ -32,10 +35,13 @@ public class ReporteArchivo {
      * @param tituloReporte Titulo del reporte.
      * @param ruta          Ruta del archivo CSS con el estilo del html
      * @param rutaPadre     Ruta de un html al cual crear un enlace desde este.
-     * @throws IllegalArgumentException Si se le pasa algun parametro (excepto rutaPadre) como parametro.
-     * @throws ExcepcionArchivoVacio Si se intenta instanciar un objeto a partir de un archivo sin palabras.
+     * @throws IllegalArgumentException Si se le pasa algun parametro (excepto
+     *                                  rutaPadre) como parametro.
+     * @throws ExcepcionArchivoVacio    Si se intenta instanciar un objeto a partir
+     *                                  de un archivo sin palabras.
      */
-    public ReporteArchivo(Archivo archivo, String tituloReporte, String ruta, String rutaPadre) throws ExcepcionArchivoVacio {
+    public ReporteArchivo(Archivo archivo, String tituloReporte, String ruta, String rutaPadre)
+            throws ExcepcionArchivoVacio {
         if (archivo == null || ruta == null || tituloReporte == null)
             throw new IllegalArgumentException("Los parametros archivo, ruta y tituloReporte no pueden ser null.");
         if (archivo.totalPalabras() == 0) {
@@ -49,14 +55,19 @@ public class ReporteArchivo {
     }
 
     /**
-     * Genera los reportes del archivo.
+     * Genera los reportes del archivo y los escribe en el stream pasado como
+     * parámetro.
+     * 
+     * @param out         Stream en el cual escribir el reporte.
+     * @param IOException si ocurre un error de I/O al escribir al guardar el
+     *                    reporte.
      */
-    public void generarReportes() {
+    public void generarReportes(Writer out) throws IOException {
         // variable para contar el total de repeticiones de palabras.
         int totalPalabras = 0;
         // Genera el reporte del conteo de las palabras
         Coleccion<String[]> elementos = new Lista<>();
-        elementos.agrega(new String[]{"Palabra", "repeticiones"}); // agrega los enunciados.
+        elementos.agrega(new String[] { "Palabra", "repeticiones" }); // agrega los enunciados.
         for (Archivo.PalabraContada palabra : archivo) {
             int repeticionesPalabra = palabra.obtenerRepeticiones();
             totalPalabras += repeticionesPalabra;
@@ -67,7 +78,7 @@ public class ReporteArchivo {
         // Genera los demas reportes.
         // Coleccion para las leyendas de los arboles
         Coleccion<String[]> leyendaArboles = new Lista<>();
-        leyendaArboles.agrega(new String[]{"Palabra", "Repeticiones"}); // Encabezados de la tabla de leyendas.
+        leyendaArboles.agrega(new String[] { "Palabra", "Repeticiones" }); // Encabezados de la tabla de leyendas.
         MonticuloMinimo<PalabraContada> monticulo = archivo.monticuloPalabras();
         Coleccion<Archivo.PalabraContada> palabrasMasRepetidas = new Lista<>();
         // booleanos para controlar el ciclo while
@@ -108,12 +119,14 @@ public class ReporteArchivo {
             }
         }
         cuerpoHTML.agregarContenido(
-                UtilReportes.reporteGraficas(graficaPastel, "Grafica de Pastel de las palabras mas usadas."));
+                UtilReportes.reporteGraficas(graficaPastel, "Grafica de Pastel de las palabras mas repetidas."));
         cuerpoHTML.agregarContenido(
-                UtilReportes.reporteGraficas(graficaBarras, "Grafica de Barras de las palabras mas usadas."));
+                UtilReportes.reporteGraficas(graficaBarras, "Grafica de Barras de las palabras mas repetidas."));
         cuerpoHTML.agregarContenido(UtilReportes.reporteGraficoConLeyenda(arbolRojinegro, leyendaArboles,
                 "Arbol Rojinegro de las palabras mas repetidas"));
-        cuerpoHTML.agregarContenido(
-                UtilReportes.reporteGraficoConLeyenda(arbolAVL, leyendaArboles, "Arbol AVL de las palabras mas repetidas"));
+        cuerpoHTML.agregarContenido(UtilReportes.reporteGraficoConLeyenda(arbolAVL, leyendaArboles,
+                "Arbol AVL de las palabras mas repetidas"));
+        // Imprime el reporte
+        html.imprimirHTML(out);
     }
 }
