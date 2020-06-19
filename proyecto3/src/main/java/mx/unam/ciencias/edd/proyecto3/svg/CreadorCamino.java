@@ -20,12 +20,12 @@ public class CreadorCamino {
 	 * @param y Coordenada y.
 	 */
 	public CreadorCamino puntoInicio(double x, double y) {
-		d.append(String.format("M %.2f %.2f", x, y));
+		d.append(String.format("M %.2f %.2f ", x, y));
 		return this;
 	}
 
 	public CreadorCamino cerrarSubcamino() {
-		d.append("z");
+		d.append("Z");
 		return this;
 	}
 	
@@ -35,8 +35,8 @@ public class CreadorCamino {
 	}
 
 	public CreadorCamino arco(double radioX, double radioY, double rotacionEjeX,
-			double banderaLargoArco, double banderaOrientacionArco, double finalX, double finalY) {
-		d.append(String.format("A %.2f %.2f %.2f %.2f %.2f %.2f %.2f ", radioX, radioY,
+			int banderaLargoArco, int banderaOrientacionArco, double finalX, double finalY) {
+		d.append(String.format("A %.2f %.2f %.2f %d %d %.2f %.2f ", radioX, radioY,
 				rotacionEjeX, banderaLargoArco, banderaOrientacionArco, finalX, finalY));
 		return this;
 	}
@@ -57,7 +57,7 @@ public class CreadorCamino {
 	}
 	
 	public String construir() {
-		return String.format("<path d=\"%s\" fill=\"%s\" stroke=\"%s\" stroke-width=\"%.2f\" />",
+		return String.format("<path d='%s' fill='%s' stroke='%s' stroke-width='%.2f'/>\n",
 				d.toString(), colorRelleno.getValor(), colorBorde.getValor(), anchoLinea);
 	}
 }

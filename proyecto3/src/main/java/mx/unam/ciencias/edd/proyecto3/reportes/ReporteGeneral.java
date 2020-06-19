@@ -11,6 +11,7 @@ import mx.unam.ciencias.edd.Lista;
 import mx.unam.ciencias.edd.proyecto3.graficador.DibujarGrafica;
 import mx.unam.ciencias.edd.proyecto3.html.EtiquetaEmparejada;
 import mx.unam.ciencias.edd.proyecto3.html.HTML;
+import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 
 /**
  * Clase para generar reportes de archivos de texto, genera un reporte con el
@@ -21,7 +22,7 @@ import mx.unam.ciencias.edd.proyecto3.html.HTML;
  */
 public class ReporteGeneral {
 
-    private Archivo[] archivos;
+    private Coleccion<Pareja<Archivo, String>> archivos;
     private HTML html;
     private EtiquetaEmparejada cuerpoHTML;
 
@@ -33,10 +34,10 @@ public class ReporteGeneral {
      * @param tituloReporte Titulo del reporte.
      * @param ruta          Ruta del archivo CSS con el estilo del html
      */
-    public ReporteGeneral(Archivo[] archivos, String tituloReporte, String ruta) {
+    public ReporteGeneral(Lista<Pareja<Archivo, String>> archivos, String tituloReporte, String ruta) {
         if (archivos == null || ruta == null || tituloReporte == null)
             throw new IllegalArgumentException("Los parametros archivo, ruta y tituloReporte no pueden ser null.");
-        this.archivos = archivos;
+        this.archivos = archivos.copia();
         html = new HTML();
         html.agregarContenido(UtilReportes.encabezadoDocumento("Reporte General", ruta));
         cuerpoHTML = UtilReportes.cuerpoDocumento("Reporte General", null);
@@ -57,19 +58,23 @@ public class ReporteGeneral {
         cuerpoHTML.agregarContenido(UtilReportes.reporteTotalPalabras(archivos));
         // Genera la grafica con la relación entre los archivos.
         Coleccion<String[]> leyendaArchivos = new Lista<>();
-        leyendaArchivos.agrega(new String[] { "Identificador", "Nombre Archivo" }); // Leyenda para la grafica.
+        leyendaArchivos.agrega(new String[] { "ID", "Nombre Archivo" }); // Leyenda para la grafica.
         Diccionario<Archivo, Conjunto<Archivo>> auxiliarGrafica = new Diccionario<>();
-        for (int i = 0; i < archivos.length; i++) {
-            Archivo archivo = archivos[i];
+        int i = -1;
+        for (Pareja<Archivo, String> pareja : archivos) {
+            ++i;
+            Archivo archivo = pareja.getX();
+            int j = -1;
             leyendaArchivos
                     .agrega(new String[] { Integer.toString(archivo.obtenerIdentificador()), archivo.obtenerNombre() });
             Conjunto<Archivo> otrosArchivos = new Conjunto<>();
-            for (int j = 0; j < archivos.length; j++) {
+            for (Pareja<Archivo, String> parejaInterna : archivos) {
+                ++j;
                 if (i == j)
                     continue;
-                otrosArchivos.agrega(archivos[j]);
+                otrosArchivos.agrega(parejaInterna.getX());
             }
-            auxiliarGrafica.agrega(archivos[i], otrosArchivos);
+            auxiliarGrafica.agrega(archivo, otrosArchivos);
         }
         Coleccion<Integer> elementosGrafica = new Lista<>();
         Iterator<Archivo> iterador = auxiliarGrafica.iteradorLlaves();

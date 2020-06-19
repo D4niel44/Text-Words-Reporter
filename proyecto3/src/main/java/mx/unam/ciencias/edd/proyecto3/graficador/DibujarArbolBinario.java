@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 
 import mx.unam.ciencias.edd.ArbolBinario;
+import mx.unam.ciencias.edd.Cola;
 import mx.unam.ciencias.edd.VerticeArbolBinario;
 import mx.unam.ciencias.edd.proyecto3.html.ContenidoHTML;
 import mx.unam.ciencias.edd.proyecto3.svg.ColorSVG;
@@ -18,6 +19,7 @@ import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 public abstract class DibujarArbolBinario<T> implements GraficableSVG, ContenidoHTML {
 
     protected ArbolBinario<T> arbolBinario;
+    private final double diametro = 30;
 
     /**
      * Crea un nuevo arbol binario dibujable.
@@ -62,11 +64,11 @@ public abstract class DibujarArbolBinario<T> implements GraficableSVG, Contenido
 
     /* genera un SVG del arbol Binario */
     private SVG generarSVG() {
-        double diametro = 30;
-        double largo = diametro * arbolBinario.getElementos() * 2;
+        double largo = (diametro * arbolBinario.altura() * 3);
         double ancho = diametro * (arbolBinario.getElementos() + 2);
         SVG svg = new SVG(largo, ancho);
-        graficarAuxiliar(arbolBinario.raiz(), Pareja.crearPareja((ancho) / 2, diametro), svg, diametro / 2, ancho / 2);
+        double anchoRaiz = obtenerElementosSubArbolIZquierdo(arbolBinario.raiz()) * diametro;
+        graficarAuxiliar(arbolBinario.raiz(), Pareja.crearPareja(anchoRaiz, diametro), svg, diametro / 2, anchoRaiz);
         return svg;
     }
 
@@ -82,16 +84,47 @@ public abstract class DibujarArbolBinario<T> implements GraficableSVG, Contenido
     protected void graficarAristas(VerticeArbolBinario<T> vertice, Pareja<Double, Double> puntoVertice, SVG svg,
             double radio, double incremento) {
         if (vertice.hayIzquierdo()) {
-            Pareja<Double, Double> izquierdo = Pareja.crearPareja(puntoVertice.getX() - (incremento / 2),
+            VerticeArbolBinario<T> vIzquierdo = vertice.izquierdo();
+            double incrementoIzquierdo = puntoVertice.getX() - obtenerElementosSubArbolDerecho(vIzquierdo) * diametro;
+            Pareja<Double, Double> izquierdo = Pareja.crearPareja(incrementoIzquierdo,
                     puntoVertice.getY() + (radio * 4));
             svg.linea(puntoVertice, izquierdo, ColorSVG.BLACK);
-            graficarAuxiliar(vertice.izquierdo(), izquierdo, svg, radio, incremento / 2);
+            graficarAuxiliar(vIzquierdo, izquierdo, svg, radio, incrementoIzquierdo);
         }
         if (vertice.hayDerecho()) {
-            Pareja<Double, Double> derecho = Pareja.crearPareja(puntoVertice.getX() + incremento / 2,
+            VerticeArbolBinario<T> vDerecho = vertice.derecho();
+            double incrementoDerecho = puntoVertice.getX() + obtenerElementosSubArbolIZquierdo(vDerecho) * diametro;
+            Pareja<Double, Double> derecho = Pareja.crearPareja(incrementoDerecho,
                     puntoVertice.getY() + (radio * 4));
             svg.linea(puntoVertice, derecho, ColorSVG.BLACK);
-            graficarAuxiliar(vertice.derecho(), derecho, svg, radio, incremento / 2);
+            graficarAuxiliar(vDerecho, derecho, svg, radio, incrementoDerecho);
         }
+    }
+
+    protected int obtenerElementosSubArbolIZquierdo(VerticeArbolBinario<T> vertice) {
+        if (!vertice.hayIzquierdo())
+            return 1;
+        return obtenerNumeroElementos(vertice.izquierdo()) + 1;
+    }
+
+    protected int obtenerElementosSubArbolDerecho(VerticeArbolBinario<T> vertice) {
+        if (!vertice.hayDerecho())
+            return 1;
+        return obtenerNumeroElementos(vertice.derecho()) + 1;
+    }
+
+    private int obtenerNumeroElementos(VerticeArbolBinario<T> vertice) {
+        Cola<VerticeArbolBinario<T>> cola = new Cola<>();
+        cola.mete(vertice);
+        int i = 0;
+        while (!cola.esVacia()) {
+            VerticeArbolBinario<T> v = cola.saca();
+            if (v.hayIzquierdo())
+                cola.mete(v.izquierdo());
+            if (v.hayDerecho())
+                cola.mete(v.derecho());
+            ++i;
+        }
+        return i;
     }
 }

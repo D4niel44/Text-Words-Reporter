@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import mx.unam.ciencias.edd.Conjunto;
+import mx.unam.ciencias.edd.Lista;
 import mx.unam.ciencias.edd.proyecto3.excepciones.ExcepcionArchivoNoEncontrado;
 import mx.unam.ciencias.edd.proyecto3.excepciones.ExcepcionArchivoNoLeido;
 import mx.unam.ciencias.edd.proyecto3.excepciones.ExcepcionArchivoNocreado;
@@ -17,6 +18,7 @@ import mx.unam.ciencias.edd.proyecto3.reportes.Archivo;
 import mx.unam.ciencias.edd.proyecto3.reportes.ReporteArchivo;
 import mx.unam.ciencias.edd.proyecto3.reportes.ReporteGeneral;
 import mx.unam.ciencias.edd.proyecto3.util.Copia;
+import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 
 /**
  * Clase principal del proyecto.
@@ -53,37 +55,48 @@ public class Reportador {
 
 	public void ejecutar() {
 		crearDirectorioDestino();
-		copiarRecurso("style.css"); // Copia la hoja de estilo al directorio de destino.
+		// Valida que el directorio de destino no contenga un archivo nombrado index.html
+		File rutaReporteGeneral = crearCaminoArchivo("index.html");
+		if (rutaReporteGeneral.exists())
+			throw new ExcepcionArchivoNocreado(
+					"No se ha podido crear el archivo \"index.html\" en el directorio de salida:"
+							+ "El directorio de salida ya contiene un archivo nombrado \"index.html\"");
+		String nombreRecurso = copiarRecurso("style.css"); // Copia la hoja de estilo al directorio de destino.
 		Archivo[] archivos = leerArchivos();
 		// Crea los reportes de los archivos.
-		ReporteGeneral reportePrincipal = new ReporteGeneral(archivos, "Reporte General", "style.css");
+		Lista<Pareja<Archivo, String>> archivosConRuta = new Lista<>();
+		for (int i = 0; i < archivos.length; i++) {
+			Archivo archivo = archivos[i];
+			String nombre = archivo.obtenerNombre();
+			File rutaArchivo = validarNombreArchivoDestino(nombre + ".html");
+			archivosConRuta.agrega(Pareja.crearPareja(archivo, rutaArchivo.getName()));
+			ReporteArchivo reporteArchivo = new ReporteArchivo(archivo, "Reporte" + nombre, nombreRecurso,
+					"index.html");
+			try {
+				reporteArchivo.generarReportes(new FileWriter(rutaArchivo));
+			} catch (IOException ioe) {
+				throw new ExcepcionArchivoNocreado(
+						"Ha ocurrido un error inesperado al tratar de escribir en el directorio: "
+								+ directorioDestino.getAbsolutePath(),
+						ioe);
+			}
+		}
+		ReporteGeneral reportePrincipal = new ReporteGeneral(archivosConRuta, "Reporte General", nombreRecurso);
 		try {
-			reportePrincipal.generarReportes(new FileWriter(crearCaminoArchivo("index.html")));
+			reportePrincipal.generarReportes(new FileWriter(rutaReporteGeneral));
 		} catch (IOException ioe) {
 			throw new ExcepcionArchivoNocreado(
 					"Ha ocurrido un error inesperado al tratar de escribir en el directorio: "
 							+ directorioDestino.getAbsolutePath(),
 					ioe);
 		}
-		for (int i = 0; i < archivos.length; i++) {
-			Archivo archivo = archivos[i];
-			String nombre = archivo.obtenerNombre();
-			ReporteArchivo reporteArchivo = new ReporteArchivo(archivo, "Reporte" + nombre,
-					"style.css", "index.html");
-			try {
-				reporteArchivo.generarReportes(new FileWriter(validarNombreArchivoDestino(nombre + ".html")));
-			} catch (IOException ioe) {
-				throw new ExcepcionArchivoNocreado(
-					"Ha ocurrido un error inesperado al tratar de escribir en el directorio: "
-							+ directorioDestino.getAbsolutePath(),
-					ioe);
-			}
-		}
 	}
 
 	private File validarNombreArchivoDestino(String nombre) {
 		String nombreValidar = nombre;
 		int i = 1;
+		if (nombre.equals("index.html"))
+			nombreValidar = nombre + String.format("(%d)", i++);
 		while (crearCaminoArchivo(nombreValidar).exists())
 			nombreValidar = nombre + String.format("(%d)", i++);
 		return crearCaminoArchivo(nombreValidar);
@@ -116,15 +129,16 @@ public class Reportador {
 	}
 
 	/* Copia un recurso al directorio de destino de los reportes. */
-	private void copiarRecurso(String nombreRecurso) {
+	private String copiarRecurso(String nombreRecurso) {
 		ClassLoader cargadorRecurso = this.getClass().getClassLoader();
 		InputStream recurso = cargadorRecurso.getResourceAsStream(nombreRecurso);
+		File nombreValido = validarNombreArchivoDestino(nombreRecurso);
 		try {
-			Copia.copia(recurso,
-					new FileOutputStream(crearCaminoArchivo(nombreRecurso)));
+			Copia.copia(recurso, new FileOutputStream(nombreValido));
 		} catch (IOException ioe) {
 			throw new ExcepcionArchivoNocreado("No se ha podido copiar en el directorio de destino", ioe);
 		}
+		return nombreValido.getName();
 	}
 
 	/*

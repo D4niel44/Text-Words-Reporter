@@ -7,6 +7,7 @@ import mx.unam.ciencias.edd.Lista;
 import mx.unam.ciencias.edd.proyecto3.html.ContenidoHTML;
 import mx.unam.ciencias.edd.proyecto3.html.EtiquetaEmparejada;
 import mx.unam.ciencias.edd.proyecto3.html.EtiquetaSimple;
+import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 import mx.unam.ciencias.edd.proyecto3.util.UtilHTML;
 
 public class UtilReportes {
@@ -66,7 +67,7 @@ public class UtilReportes {
             String[] filaDatos = iteradorDatos.next();
             EtiquetaEmparejada fila = UtilHTML.filaTabla();
             for (int i = 0; i < filaDatos.length; i++) {
-                EtiquetaEmparejada entrada = UtilHTML.encabezadoTabla();
+                EtiquetaEmparejada entrada = UtilHTML.entradaTabla();
                 entrada.agregarContenido(UtilHTML.textoPlano(filaDatos[i]));
                 fila.agregarContenido(entrada);
             }
@@ -135,13 +136,13 @@ public class UtilReportes {
         return division;
     }
 
-    public static ContenidoHTML reporteTotalPalabras(Archivo[] archivos) {
+    public static ContenidoHTML reporteTotalPalabras(Coleccion<Pareja<Archivo, String>> archivos) {
         Coleccion<String[]> coleccionArchivos = new Lista<>();
         coleccionArchivos.agrega(new String[] { "nombre", "total de palabras" });
-        for (int i = 0; i < archivos.length; i++) {
-            Archivo archivo = archivos[i];
+        for (Pareja<Archivo, String> pareja : archivos) {
+            Archivo archivo = pareja.getX();
             String nombreArchivo = archivo.obtenerNombre();
-            EtiquetaEmparejada enlace = UtilHTML.enlace(nombreArchivo + ".html", nombreArchivo);
+            EtiquetaEmparejada enlace = UtilHTML.enlace(pareja.getY(), nombreArchivo);
             coleccionArchivos.agrega(new String[] { enlace.codigoHTML(), Integer.toString(archivo.totalPalabras()) });
         }
         EtiquetaEmparejada division = UtilHTML.division("reporteNombreArchivos", "Reporte");

@@ -23,6 +23,48 @@ import mx.unam.ciencias.edd.proyecto3.svg.GraficaPastel;
  */
 public class ReporteArchivo {
 
+    /**
+     * Clase para enteros comparables que se representen en cadena por una ID
+     */
+    private static class EnteroID implements Comparable<EnteroID> {
+        private int entero;
+        private int id;
+
+        /**
+         * Crea un nuevo entero con ID
+         * 
+         * @param id     ID del entero
+         * @param entero Número entero
+         */
+        public EnteroID(int id, int entero) {
+            this.id = id;
+            this.entero = entero;
+        }
+
+        /**
+         * La representación en cadena del entero es su ID.
+         * 
+         * @return Cadena con la ID del entero.
+         */
+        @Override
+        public String toString() {
+            return Integer.toString(id);
+        }
+
+        /**
+         * Compara este entero con el pasado como parámetro.
+         * 
+         * @param o Entero con el cual comparar este.
+         * @return Un valor menor a cero si este entero es menor que el otro, igual a
+         *         cero si son iguales, y mayor a cero si es mayor.
+         */
+        @Override
+        public int compareTo(EnteroID o) {
+            return this.entero - o.entero;
+        }
+
+    }
+
     private Archivo archivo;
     private HTML html;
     private EtiquetaEmparejada cuerpoHTML;
@@ -63,7 +105,7 @@ public class ReporteArchivo {
         int totalPalabras = 0;
         // Genera el reporte del conteo de las palabras
         Coleccion<String[]> elementos = new Lista<>();
-        elementos.agrega(new String[] { "Palabra", "repeticiones" }); // agrega los enunciados.
+        elementos.agrega(new String[] {"Palabra", "repeticiones" }); // agrega los enunciados.
         for (Archivo.PalabraContada palabra : archivo) {
             int repeticionesPalabra = palabra.obtenerRepeticiones();
             totalPalabras += repeticionesPalabra;
@@ -74,7 +116,7 @@ public class ReporteArchivo {
         // Genera los demas reportes.
         // Coleccion para las leyendas de los arboles
         Coleccion<String[]> leyendaArboles = new Lista<>();
-        leyendaArboles.agrega(new String[] { "Palabra", "Repeticiones" }); // Encabezados de la tabla de leyendas.
+        leyendaArboles.agrega(new String[] { "ID", "Palabra", "Repeticiones" }); // Encabezados de la tabla de leyendas.
         MonticuloMinimo<PalabraContada> monticulo = archivo.monticuloPalabras();
         Coleccion<Archivo.PalabraContada> palabrasMasRepetidas = new Lista<>();
         // booleanos para controlar el ciclo while
@@ -85,7 +127,8 @@ public class ReporteArchivo {
         ContenidoHTML arbolRojinegro = null;
         ContenidoHTML arbolAVL = null;
         double porcientoAcumulado = 0.0;
-        Coleccion<Integer> repeticionesPalabras = new Lista<>();
+        int id = 1;
+        Coleccion<EnteroID> repeticionesPalabras = new Lista<>();
         while (true) {
             // Crea una nueva coleccion solo con las repeticiones de las palabras para
             // construir los arboles.
@@ -93,8 +136,8 @@ public class ReporteArchivo {
             int repeticionesPalabra = palabra.obtenerRepeticiones();
             porcientoAcumulado += ((double) repeticionesPalabra) / totalPalabras;
             palabrasMasRepetidas.agrega(palabra);
-            repeticionesPalabras.agrega(palabra.obtenerRepeticiones());
-            String[] entradaArbol = { palabra.obtenerPalabra(), Integer.toString(repeticionesPalabra) };
+            repeticionesPalabras.agrega(new EnteroID(id, palabra.obtenerRepeticiones()));
+            String[] entradaArbol = { Integer.toString(id) ,palabra.obtenerPalabra(), Integer.toString(repeticionesPalabra) };
             leyendaArboles.agrega(entradaArbol);
             // Si no se ha generado el reporte y, ya no hay mas palabras en el archivo o se
             // llega ha que se han tomado 8 elementos o que se ha tomado al menos el 95
@@ -113,6 +156,7 @@ public class ReporteArchivo {
                 break; // rompe el ciclo, si ya se generaron los svg de los arboles también los de las
                        // graficas.
             }
+            ++id;
         }
         cuerpoHTML.agregarContenido(
                 UtilReportes.reporteGraficas(graficaPastel, "Grafica de Pastel de las palabras mas repetidas."));
