@@ -131,7 +131,7 @@ public class UtilHTML {
             throw new IllegalArgumentException("No se admiten parametros null.");
         EtiquetaEmparejada division = new EtiquetaEmparejada("div");
         division.agregarAtributo("id", id);
-        division.agregarAtributo("clase", clase);
+        division.agregarAtributo("class", clase);
         return division;
     }
 
