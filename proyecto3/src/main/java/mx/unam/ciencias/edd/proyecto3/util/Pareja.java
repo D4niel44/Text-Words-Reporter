@@ -1,8 +1,5 @@
 package mx.unam.ciencias.edd.proyecto3.util;
 
-import mx.unam.ciencias.edd.Dispersores;
-
-
 /**
  * Clase que representa una tupla de elementos no necesariamente homogénea.
  */
@@ -17,8 +14,6 @@ public class Pareja<S, T> {
      * @param y Segundo elemento.
      */
     public Pareja(S x, T y) {
-        if (x == null || y == null)
-            throw new IllegalArgumentException("Los elementos no pueden ser null.");
         this.x = x;
         this.y = y;
     }
@@ -93,27 +88,41 @@ public class Pareja<S, T> {
             return false;
         @SuppressWarnings("unchecked")
         Pareja<S, T> otro = (Pareja<S, T>) objeto;
-        return this.x.equals(otro.x) && this.y.equals(otro.y);
+        if (this.x == null) {
+            if (otro.x != null) {
+                return false;
+            }
+        } else {
+            if (otro.x == null) {
+                return false;
+            } else if (!this.x.equals(otro.x)) {
+                return false;
+            }
+
+        }
+        if (this.y == null) {
+            if (otro.y != null) {
+                return false;
+            }
+        } else {
+            if (otro.y == null) {
+                return false;
+            } else if (!this.y.equals(otro.y)) {
+                return false;
+            }
+
+        }
+        return true;
     }
 
     /**
-     * Obtiene un hash de la pareja aplicando hashCode a los elementos y luego aplica Bob Jenkins a dicho resultado.
+     * Obtiene un hash de la pareja aplicando hashCode a los elementos y luego
+     * aplica Bob Jenkins a dicho resultado.
+     * 
      * @return Hash de la pareja.
      */
     @Override
     public int hashCode() {
-        int hashCodeX = x.hashCode();
-        int hashCodeY = y.hashCode();
-        byte[] bytes = {
-            (byte)(hashCodeX >>> 24),
-            (byte)(hashCodeX >>> 16),
-            (byte)(hashCodeX >>> 8),
-            (byte)(hashCodeX),
-            (byte)(hashCodeY >>> 24),
-            (byte)(hashCodeY >>> 16),
-            (byte)(hashCodeY >>> 8),
-            (byte)(hashCodeY),
-        };
-        return Dispersores.dispersaBJ(bytes);
+        return x.hashCode();
     }
 }
