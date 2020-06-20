@@ -14,14 +14,32 @@ import java.io.Reader;
 public class LectorPalabra implements Closeable {
 	private BufferedReader reader;
 
+	/**
+	 * Crea un nuevo lector a partir de un Reader
+	 * 
+	 * @param in Reader del cual crear el lector.
+	 */
 	public LectorPalabra(Reader in) {
 		reader = new BufferedReader(in);
 	}
 
+	/**
+	 * Crea un nuevo lector a partir del archivo introducido como parámetro.
+	 * 
+	 * @param archivo Archivo a leer
+	 * @throws FileNotFoundException Si no se encuentra el archivo.
+	 */
 	public LectorPalabra(File archivo) throws FileNotFoundException {
 		this(new FileReader(archivo));
 	}
 
+	/**
+	 * Lee la siguiente palabra.
+	 * 
+	 * @return Cadena con la palabra leída o <code>null</code> si se vació el
+	 *         lector.
+	 * @throws IOException Si ocurre un error de I/O al leer la palabra.
+	 */
 	public String leePalabra() throws IOException {
 		StringBuilder s = new StringBuilder();
 		while (true) {
@@ -34,7 +52,8 @@ public class LectorPalabra implements Closeable {
 			}
 			/* Maneja los caracteres de control */
 			if (Character.toString((char) c).matches("[\\p{Cntrl}\\x20]")) {
-				// si ya se empezó a leer la palabra se termina de leer, si no se continua a leer el
+				// si ya se empezó a leer la palabra se termina de leer, si no se continua a
+				// leer el
 				// siguiente caracter
 				if (s.length() != 0) {
 					break;
@@ -46,8 +65,10 @@ public class LectorPalabra implements Closeable {
 		return s.toString();
 	}
 
+	/**
+	 * Cierra el lector.
+	 */
 	public void close() throws IOException {
 		reader.close();
 	}
 }
-
