@@ -116,8 +116,7 @@ public class Pareja<S, T> {
     }
 
     /**
-     * Obtiene un hash de la pareja aplicando hashCode a los elementos y luego
-     * aplica Bob Jenkins a dicho resultado.
+     * Obtiene un hash de la pareja aplicando hashCode al primer elemento.
      * 
      * @return Hash de la pareja.
      */
