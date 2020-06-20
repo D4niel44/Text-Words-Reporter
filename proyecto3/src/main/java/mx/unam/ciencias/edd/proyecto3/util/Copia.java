@@ -24,7 +24,9 @@ public class Copia {
     public static void copia(InputStream entrada, OutputStream salida) throws IOException {
         try (BufferedInputStream in = new BufferedInputStream(entrada);
                 BufferedOutputStream out = new BufferedOutputStream(salida)) {
-            out.write(in.read());
+            int byteLeido;
+            while ((byteLeido = in.read()) > 0)
+                out.write(byteLeido);
         }
     }
 }

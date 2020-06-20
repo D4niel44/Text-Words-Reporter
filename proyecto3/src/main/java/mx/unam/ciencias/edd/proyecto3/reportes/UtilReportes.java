@@ -108,14 +108,14 @@ public class UtilReportes {
     }
 
     public static ContenidoHTML reporteConteo(Iterable<String[]> datos) {
-        EtiquetaEmparejada division = UtilHTML.division("reporteConteoPalabras", "Reporte");
+        EtiquetaEmparejada division = UtilHTML.division("reporteConteoPalabras", "reporte");
         division.agregarContenido(UtilHTML.h2("Conteo de Palabras"));
         division.agregarContenido(tabla(datos));
         return division;
     }
 
     public static ContenidoHTML reporteGraficas(ContenidoHTML grafica, String tituloGrafica) {
-        EtiquetaEmparejada division = UtilHTML.division("reporte_" + tituloGrafica.replaceAll(" ", ""), "Reporte");
+        EtiquetaEmparejada division = UtilHTML.division("reporte_" + tituloGrafica.replaceAll(" ", ""), "reporte");
         division.agregarContenido(UtilHTML.h2(tituloGrafica));
         division.agregarContenido(grafica);
         return division;
@@ -123,7 +123,7 @@ public class UtilReportes {
 
     public static ContenidoHTML reporteGraficoConLeyenda(ContenidoHTML grafico, Iterable<String[]> leyendas, String titulo) {
         String tituloSinEspacios = titulo.replaceAll(" ", "");
-        EtiquetaEmparejada division = UtilHTML.division("reporte_" + tituloSinEspacios, "Reporte");
+        EtiquetaEmparejada division = UtilHTML.division("reporte_" + tituloSinEspacios, "reporte");
         division.agregarContenido(UtilHTML.h2(titulo));
         // Subdivisión con el gráfico
         EtiquetaEmparejada subdivisionArbol = UtilHTML.division("grafico_" + tituloSinEspacios, "grafico");
@@ -145,7 +145,7 @@ public class UtilReportes {
             EtiquetaEmparejada enlace = UtilHTML.enlace(pareja.getY(), nombreArchivo);
             coleccionArchivos.agrega(new String[] { enlace.codigoHTML(), Integer.toString(archivo.totalPalabras()) });
         }
-        EtiquetaEmparejada division = UtilHTML.division("reporteNombreArchivos", "Reporte");
+        EtiquetaEmparejada division = UtilHTML.division("reporteNombreArchivos", "reporte");
         division.agregarContenido(UtilHTML.h2("Archivos"));
         division.agregarContenido(tabla(coleccionArchivos));
         return division;

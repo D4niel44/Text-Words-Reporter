@@ -70,7 +70,7 @@ public class Reportador {
 			String nombre = archivo.obtenerNombre();
 			File rutaArchivo = validarNombreArchivoDestino(nombre + ".html");
 			archivosConRuta.agrega(Pareja.crearPareja(archivo, rutaArchivo.getName()));
-			ReporteArchivo reporteArchivo = new ReporteArchivo(archivo, "Reporte" + nombre, nombreRecurso,
+			ReporteArchivo reporteArchivo = new ReporteArchivo(archivo, "Reporte " + nombre, nombreRecurso,
 					"index.html");
 			try {
 				reporteArchivo.generarReportes(new FileWriter(rutaArchivo));
