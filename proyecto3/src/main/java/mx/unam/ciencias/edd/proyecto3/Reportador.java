@@ -53,9 +53,14 @@ public class Reportador {
 					"Debe especificarse un directorio de destino de los reportes con la bandera -o seguida de la ruta del directorio de destino.");
 	}
 
+	/**
+	 * Ejecuta la aplicación, genera los reportes de los archivos y los guarda en el
+	 * directorio de destino.
+	 */
 	public void ejecutar() {
 		crearDirectorioDestino();
-		// Valida que el directorio de destino no contenga un archivo nombrado index.html
+		// Valida que el directorio de destino no contenga un archivo nombrado
+		// index.html
 		File rutaReporteGeneral = crearCaminoArchivo("index.html");
 		if (rutaReporteGeneral.exists())
 			throw new ExcepcionArchivoNocreado(
@@ -92,6 +97,10 @@ public class Reportador {
 		}
 	}
 
+	/*
+	 * Genera un nombre para el archivo en el directtorio de destino que no coincida
+	 * con ninguno actualmente existente.
+	 */
 	private File validarNombreArchivoDestino(String nombre) {
 		String nombreValidar = nombre;
 		int i = 1;
@@ -112,6 +121,7 @@ public class Reportador {
 		}
 	}
 
+	/* Lee los archivos a reportar. */
 	private Archivo[] leerArchivos() {
 		int i = 0;
 		Archivo[] archivos = new Archivo[this.archivos.getElementos()];
