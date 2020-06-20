@@ -1,10 +1,10 @@
 package mx.unam.ciencias.edd.proyecto3.util;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Clase que ofrece métodos estáticos para copiar archivos.
