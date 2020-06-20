@@ -83,55 +83,35 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 
 	private class Iterador implements Iterator<PalabraContada> {
 
-		private final Iterator<CadenaNormalizada> iteradorDiccionario = palabras.iteradorLlaves();
+		private final Iterator<String> iteradorDiccionario = palabras.iteradorLlaves();
 
 		public boolean hasNext() {
 			return iteradorDiccionario.hasNext();
 		}
 
 		public PalabraContada next() {
-			CadenaNormalizada palabra = iteradorDiccionario.next();
-			return new PalabraContada(palabra.cadena, palabras.get(palabra));
+			String palabra = iteradorDiccionario.next();
+			return new PalabraContada(palabra, palabras.get(palabra));
 		}
 	}
 
-	private static class CadenaNormalizada {
-		private String cadena;
-		private String cadenaNormalizada;
-
-		public CadenaNormalizada(String cadena) {
-			this.cadena = cadena;
-			this.cadenaNormalizada = Normalizer.normalize(cadena, Normalizer.Form.NFKD);
-			cadenaNormalizada = cadenaNormalizada.toLowerCase();
-			cadenaNormalizada = cadenaNormalizada.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
-		}
-
-		public String toString() {
-			return cadena;
-		}
-
-		@Override
-		public int hashCode() {
-			return cadenaNormalizada.hashCode();
-		}
-
-		@Override
-		public boolean equals(Object o) {
-			if (o == null || getClass() != o.getClass())
-				return false;
-			CadenaNormalizada otra = (CadenaNormalizada) o;
-			return this.cadenaNormalizada.equals(otra.cadenaNormalizada);
-		}
+	private String normalizarCadena(String cadena) {
+		String cadenaNormalizada = Normalizer.normalize(cadena, Normalizer.Form.NFKD);
+		cadenaNormalizada = cadenaNormalizada.trim().toLowerCase();
+		String regex = "[^\\p{L}\\p{Nd}+]";
+		return cadenaNormalizada.replaceAll(regex, "");
 	}
 
 	/* Diccionario con las palabras del archivo. */
-	private Diccionario<CadenaNormalizada, Integer> palabras;
+	private Diccionario<String, Integer> palabras;
+	// private Diccionario<CadenaNormalizada, Integer> palabras;
 	private String nombre;
 	private int identificador;
 
 	public Archivo(File archivo, int identificador) throws FileNotFoundException, IOException {
 		palabras = new Diccionario<>();
-		// Establece el nombre del archivo como el nombre que posee en el sistema quitandole la extensión.
+		// Establece el nombre del archivo como el nombre que posee en el sistema
+		// quitandole la extensión.
 		String nombreArchivo = archivo.getName();
 		int indiceInicioExtension = nombreArchivo.indexOf('.');
 		if (indiceInicioExtension == -1)
@@ -140,16 +120,17 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 			nombre = nombreArchivo.substring(0, indiceInicioExtension);
 		this.identificador = identificador;
 		try (LectorPalabra in = new LectorPalabra(archivo)) {
-			String palabra = in.leePalabra();
-			while (palabra != null) {
-				CadenaNormalizada palabraNormalizada = new CadenaNormalizada(palabra);
+			String palabra;
+			while ((palabra = in.leePalabra()) != null) {
+				String palabraNormalizada = normalizarCadena(palabra);
+				if (palabraNormalizada.isEmpty())
+					continue;
 				if (!palabras.contiene(palabraNormalizada)) {
 					palabras.agrega(palabraNormalizada, 1);
 				} else {
 					int repeticiones = palabras.get(palabraNormalizada);
 					palabras.agrega(palabraNormalizada, repeticiones + 1);
 				}
-				palabra = in.leePalabra();
 			}
 		}
 	}
@@ -159,7 +140,7 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 	}
 
 	public boolean contienePalabra(String palabra) {
-		return palabras.contiene(new CadenaNormalizada(palabra));
+		return palabras.contiene(normalizarCadena(palabra));
 	}
 
 	public MonticuloMinimo<Archivo.PalabraContada> monticuloPalabras() {
