@@ -30,6 +30,11 @@ public class SVG implements ContenidoHTML {
         nivelIndentacion = 1;
     }
 
+    /**
+     * Crea un nuevo objeto g en el svg
+     * 
+     * @param clase Clase del objrto
+     */
     public void crearGrafico(String clase) {
         if (clase == null)
             throw new IllegalArgumentException("No se admiten valores null");
@@ -38,6 +43,9 @@ public class SVG implements ContenidoHTML {
         ++nivelIndentacion;
     }
 
+    /**
+     * Cierra el objeto g mas interior generado.
+     */
     public void cerrarGrafico() {
         --nivelIndentacion;
         svg.append(indentar());
@@ -189,6 +197,11 @@ public class SVG implements ContenidoHTML {
         texto(Pareja.crearPareja(punto.getX(), punto.getY() + (radio / 2)), colorTexto, radio, texto);
     }
 
+    /**
+     * Añade un nuevo camino al SVG.
+     * 
+     * @param camino Creado del Camino a añadir.
+     */
     public void camino(CreadorCamino camino) {
         svg.append(camino.construir());
     }
@@ -201,12 +214,18 @@ public class SVG implements ContenidoHTML {
         System.out.print(svg.toString());
     }
 
+    /**
+     * Regresa una cadena con el código del SVG. (implica cerrar el SVG)
+     */
     @Override
     public String toString() {
         cerrarSVG();
         return svg.toString();
     }
 
+    /**
+     * Cierra todas las etiquetas abiertas del SVG.
+     */
     public void cerrarSVG() {
         while (nivelIndentacion > 1)
             cerrarGrafico();
@@ -226,11 +245,22 @@ public class SVG implements ContenidoHTML {
         return indentacion.toString();
     }
 
+    /**
+     * Genera una cadena con el código html del SVG, mismo comportamiento que
+     * toString().
+     * 
+     * @return Cadena con el código html del SVG.
+     */
     @Override
     public String codigoHTML() {
         return toString();
     }
 
+    /**
+     * Imprime el SVg en el bufer pasado como parámetro.
+     * 
+     * @param out Bufer en el cual imprimir el código html del SVG
+     */
     @Override
     public void imprimirCodigoHTML(BufferedWriter out) throws IOException {
         out.write(toString());

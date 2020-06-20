@@ -1,12 +1,11 @@
 package mx.unam.ciencias.edd.proyecto3.svg;
 
-import mx.unam.ciencias.edd.proyecto3.reportes.Archivo;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 
 import mx.unam.ciencias.edd.Coleccion;
 import mx.unam.ciencias.edd.proyecto3.html.ContenidoHTML;
+import mx.unam.ciencias.edd.proyecto3.reportes.Archivo;
 import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 
 /**
@@ -62,16 +61,15 @@ public class GraficaPastel implements ContenidoHTML {
 			double finalY = centro - centro * Math.sin(anguloAcumulado + anguloRebanada);
 			ColorSVG colorElemento = COLORES[i % 8];
 			int aux = (porciento >= total / 2) ? 1 : 0;
-			graficaPastel.camino(rebanada.puntoInicio(x, y)
-					.arco(centro, centro, 0, aux, aux, finalX, finalY).linea(200, 200)
-					.colorRelleno(colorElemento).colorBorde(colorElemento).anchoLinea(1));
+			graficaPastel.camino(rebanada.puntoInicio(x, y).arco(centro, centro, 0, aux, aux, finalX, finalY)
+					.linea(200, 200).colorRelleno(colorElemento).colorBorde(colorElemento).anchoLinea(1));
 			x = finalX;
 			y = finalY;
 			// genera la leyenda del elemento
 			graficaPastel.rectangulo(Pareja.crearPareja(diametro + 20, j * anchoRectangulo), anchoRectangulo,
 					anchoRectangulo, colorElemento, colorElemento);
-			graficaPastel.texto(Pareja.crearPareja(diametro * 1.5 + 10, (j + 0.5) * anchoRectangulo + 5), ColorSVG.BLACK,
-					anchoRectangulo, palabra.obtenerPalabra());
+			graficaPastel.texto(Pareja.crearPareja(diametro * 1.5 + 10, (j + 0.5) * anchoRectangulo + 5),
+					ColorSVG.BLACK, anchoRectangulo, palabra.obtenerPalabra());
 			i++;
 			j += 2;
 			anguloAcumulado += anguloRebanada;
@@ -80,8 +78,8 @@ public class GraficaPastel implements ContenidoHTML {
 		if (otros != null) {
 			graficaPastel.rectangulo(Pareja.crearPareja(diametro + 20, j * anchoRectangulo), anchoRectangulo,
 					anchoRectangulo, ColorSVG.GRAY, ColorSVG.GRAY);
-			graficaPastel.texto(Pareja.crearPareja(diametro * 1.5 + 10, (j + 0.5) * anchoRectangulo + 5), ColorSVG.BLACK,
-					anchoRectangulo, otros);
+			graficaPastel.texto(Pareja.crearPareja(diametro * 1.5 + 10, (j + 0.5) * anchoRectangulo + 5),
+					ColorSVG.BLACK, anchoRectangulo, otros);
 		}
 	}
 
@@ -94,11 +92,22 @@ public class GraficaPastel implements ContenidoHTML {
 		return graficaPastel.toString();
 	}
 
+	/**
+	 * Regresa una cadena con el código html de la gráfica de pastel.
+	 * 
+	 * @return cadena con el código html de la gráfica.
+	 */
 	@Override
 	public String codigoHTML() {
 		return graficaPastel.codigoHTML();
 	}
 
+	/**
+	 * Imprime el código html de la gráfica de pastel en el bufer pasado como
+	 * parámetro.
+	 * 
+	 * @param out Bufer donde imprimir el código html de la gráfica de pastel.
+	 */
 	@Override
 	public void imprimirCodigoHTML(BufferedWriter out) throws IOException {
 		graficaPastel.imprimirCodigoHTML(out);

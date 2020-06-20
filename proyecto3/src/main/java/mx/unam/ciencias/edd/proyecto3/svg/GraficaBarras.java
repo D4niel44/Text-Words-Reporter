@@ -45,7 +45,8 @@ public class GraficaBarras implements ContenidoHTML {
             double largoBarra = (valorElemento / total) * largo;
             double posicionY = largoEje - largoBarra;
             // Añade el rectángulo correspondiente a la barra del elemento al SVG.
-            graficaBarras.rectangulo(Pareja.crearPareja(posicionX, posicionY), largoBarra, 50, colorBarras, colorBarras);
+            graficaBarras.rectangulo(Pareja.crearPareja(posicionX, posicionY), largoBarra, 50, colorBarras,
+                    colorBarras);
             // Añade los textos que describen la barra
             graficaBarras.texto(Pareja.crearPareja(posicionX + 25, posicionY - 2), ColorSVG.BLACK, 8.0,
                     String.format("%.2f", valorElemento)); // valor que representa la barra
@@ -54,7 +55,8 @@ public class GraficaBarras implements ContenidoHTML {
             posicionX += 80;
         }
         // Dibuja los ejes de la gráfica de barras
-        graficaBarras.linea(Pareja.crearPareja(5.0, largoEje), Pareja.crearPareja(ancho + 5.0, largoEje), ColorSVG.BLACK); // X
+        graficaBarras.linea(Pareja.crearPareja(5.0, largoEje), Pareja.crearPareja(ancho + 5.0, largoEje),
+                ColorSVG.BLACK); // X
         graficaBarras.linea(Pareja.crearPareja(5.0, 10.0), Pareja.crearPareja(5.0, largoEje), ColorSVG.BLACK); // Y
     }
 
@@ -68,11 +70,22 @@ public class GraficaBarras implements ContenidoHTML {
         return graficaBarras.toString();
     }
 
+    /**
+     * Regresa una cadena con el código html de la gráfica de barras.
+     * 
+     * @return cadena con el código html de la gráfica.
+     */
     @Override
     public String codigoHTML() {
         return graficaBarras.codigoHTML();
     }
 
+    /**
+     * Imprime el código html de la gráfica de barras en el bufer pasado como
+     * parámetro.
+     * 
+     * @param out Bufer donde imprimir el código html de la gráfica de barras.
+     */
     @Override
     public void imprimirCodigoHTML(BufferedWriter out) throws IOException {
         graficaBarras.imprimirCodigoHTML(out);
