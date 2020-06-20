@@ -6,22 +6,40 @@ import java.io.IOException;
 import mx.unam.ciencias.edd.Coleccion;
 import mx.unam.ciencias.edd.Lista;
 
+/**
+ * Clase que representa una etiqueta con contenido del html.
+ */
 public class EtiquetaEmparejada extends EtiquetaHTML {
 
     private Coleccion<ContenidoHTML> contenidos;
     private static final String INDENTACION = "    ";
 
+    /**
+     * Crea una etiqueta con el nombre introducido.
+     * 
+     * @param nombre Nombre de la etiqueta.
+     */
     public EtiquetaEmparejada(String nombre) {
         super(nombre);
         contenidos = new Lista<ContenidoHTML>();
     }
 
+    /**
+     * Agrega contenido a la etiqueta.
+     * 
+     * @param contenido Contenido html a agregar.
+     */
     public void agregarContenido(ContenidoHTML contenido) {
         if (contenido == null)
             throw new IllegalArgumentException("No se permiten parametros null.");
         contenidos.agrega(contenido);
     }
 
+    /**
+     * Genera una representación en cadena con el código html de la etiqueta.
+     * 
+     * @return Cadena con el código html de la etiqueta.
+     */
     @Override
     public String codigoHTML() {
         StringBuilder codigo = new StringBuilder();
@@ -34,6 +52,11 @@ public class EtiquetaEmparejada extends EtiquetaHTML {
         return codigo.toString();
     }
 
+    /**
+     * Imprime el contenido de la etiqueta en el bufer pasado como parametro.
+     * 
+     * @param out Bufer donde imprimir el codigo html de la etiqueta.
+     */
     @Override
     public void imprimirCodigoHTML(BufferedWriter out) throws IOException {
         out.write(cadenaInicioEtiqueta());

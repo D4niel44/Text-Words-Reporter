@@ -4,9 +4,12 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 
+/**
+ * Clase para crear documentos HTML.
+ */
 public class HTML {
-    
-    /*Encabezado de los documentos de html5 */
+
+    /* Encabezado de los documentos de html5 */
     private static final String IDENTIFICADOR = "<!DOCTYPE html>";
     private EtiquetaEmparejada etiquetaRaiz;
 
@@ -19,6 +22,7 @@ public class HTML {
 
     /**
      * Crea un html con el idioma especificado.
+     * 
      * @param idioma Lenguaje del html.
      */
     public HTML(String idioma) {
@@ -30,9 +34,11 @@ public class HTML {
 
     /**
      * Añade un atributo a la etiqueta raíz del html.
+     * 
      * @param atributo nombre del atributo.
-     * @param valor valor del atributo.
-     * @throws IllegalArgumentException Si alguno de los parámetros es <code>null</code>.
+     * @param valor    valor del atributo.
+     * @throws IllegalArgumentException Si alguno de los parámetros es
+     *                                  <code>null</code>.
      */
     public void agregarAtributo(String atributo, String valor) {
         etiquetaRaiz.agregarAtributo(atributo, valor);
@@ -40,8 +46,10 @@ public class HTML {
 
     /**
      * Añade un contenido al html.
+     * 
      * @param contenido Contenido a agregar
-     * @throws IllegalArgumentException si el parametro contenido es <code>null</code>.
+     * @throws IllegalArgumentException si el parametro contenido es
+     *                                  <code>null</code>.
      */
     public void agregarContenido(ContenidoHTML contenido) {
         if (contenido == null)
@@ -51,12 +59,13 @@ public class HTML {
 
     /**
      * Imprime el html en el writer y lo cierra
-     * @param entrada
+     * 
+     * @param salida Writer donde imprimir el html.
      */
     public void imprimirHTML(Writer salida) throws IOException {
         try (BufferedWriter out = new BufferedWriter(salida)) {
-            out.write(IDENTIFICADOR); 
-            etiquetaRaiz.imprimirCodigoHTML(out);   
+            out.write(IDENTIFICADOR);
+            etiquetaRaiz.imprimirCodigoHTML(out);
         }
     }
 

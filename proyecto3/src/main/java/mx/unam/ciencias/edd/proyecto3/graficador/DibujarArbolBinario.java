@@ -94,25 +94,27 @@ public abstract class DibujarArbolBinario<T> implements GraficableSVG, Contenido
         if (vertice.hayDerecho()) {
             VerticeArbolBinario<T> vDerecho = vertice.derecho();
             double incrementoDerecho = puntoVertice.getX() + obtenerElementosSubArbolIZquierdo(vDerecho) * diametro;
-            Pareja<Double, Double> derecho = Pareja.crearPareja(incrementoDerecho,
-                    puntoVertice.getY() + (radio * 4));
+            Pareja<Double, Double> derecho = Pareja.crearPareja(incrementoDerecho, puntoVertice.getY() + (radio * 4));
             svg.linea(puntoVertice, derecho, ColorSVG.BLACK);
             graficarAuxiliar(vDerecho, derecho, svg, radio, incrementoDerecho);
         }
     }
 
+    /* Cuenta el numero de elementos en el subarbol izquierdo del vertice */
     protected int obtenerElementosSubArbolIZquierdo(VerticeArbolBinario<T> vertice) {
         if (!vertice.hayIzquierdo())
             return 1;
         return obtenerNumeroElementos(vertice.izquierdo()) + 1;
     }
 
+    /* Cuenta el numero de elementos en el subarbol derecho del vertice */
     protected int obtenerElementosSubArbolDerecho(VerticeArbolBinario<T> vertice) {
         if (!vertice.hayDerecho())
             return 1;
         return obtenerNumeroElementos(vertice.derecho()) + 1;
     }
 
+    /* Cuenta el numero de vertices del subarbol que tiene como raíz al vertice. */
     private int obtenerNumeroElementos(VerticeArbolBinario<T> vertice) {
         Cola<VerticeArbolBinario<T>> cola = new Cola<>();
         cola.mete(vertice);
