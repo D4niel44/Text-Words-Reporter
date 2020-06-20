@@ -17,11 +17,13 @@ import mx.unam.ciencias.edd.proyecto3.util.Pareja;
  * Clase para generar reportes de archivos de texto, genera un reporte con el
  * numero de palabras en cada archivo de texto así como una grafica donde
  * relaciona dos archivos de texto si tienen al menos una palabra en comun con
- * mas de 7 caracteres
+ * mas de 7 caracteres.
  * 
  */
 public class ReporteGeneral {
 
+    // Colección con los archivos junto al nombre que ocupan en el directorio de
+    // destino del reporte
     private Coleccion<Pareja<Archivo, String>> archivos;
     private HTML html;
     private EtiquetaEmparejada cuerpoHTML;
@@ -48,9 +50,9 @@ public class ReporteGeneral {
      * Genera los reportes de los archivos y los escribe en el stream pasado como
      * parámetro.
      * 
-     * @param out Stream en el cual guardar los reportes.
-     * @param IOException    si ocurre un error de I/O al escribir al guardar el
-     *                       reporte.
+     * @param out         Stream en el cual guardar los reportes.
+     * @param IOException si ocurre un error de I/O al escribir al guardar el
+     *                    reporte.
      */
     public void generarReportes(Writer out) throws IOException {
         // Genera el reporte con el nombre de los archivos junto con el total de
@@ -61,6 +63,8 @@ public class ReporteGeneral {
         leyendaArchivos.agrega(new String[] { "ID", "Nombre Archivo" }); // Leyenda para la grafica.
         Diccionario<Archivo, Conjunto<Archivo>> auxiliarGrafica = new Diccionario<>();
         int i = -1;
+        // Añade los elementos al diccionario auxiliar para generar el reporte de
+        // archivos con elementos en común
         for (Pareja<Archivo, String> pareja : archivos) {
             ++i;
             Archivo archivo = pareja.getX();
@@ -76,6 +80,7 @@ public class ReporteGeneral {
             }
             auxiliarGrafica.agrega(archivo, otrosArchivos);
         }
+        // Busca las palabras en compun entre los archivos.
         Coleccion<Integer> elementosGrafica = new Lista<>();
         Iterator<Archivo> iterador = auxiliarGrafica.iteradorLlaves();
         while (iterador.hasNext()) {
@@ -118,6 +123,10 @@ public class ReporteGeneral {
         html.imprimirHTML(out);
     }
 
+    /*
+     * Añade todas las parejas de elementos en la lista de elementos a enlazar al la
+     * colección de elementos
+     */
     private void enlazarArchivos(Lista<Archivo> archivosEnlazar, Coleccion<Integer> elementosGrafica) {
         do {
             Archivo archivo = archivosEnlazar.getPrimero();

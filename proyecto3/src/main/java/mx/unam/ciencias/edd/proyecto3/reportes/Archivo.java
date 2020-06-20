@@ -3,8 +3,10 @@ package mx.unam.ciencias.edd.proyecto3.reportes;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Iterator;
 import java.text.Normalizer;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 import mx.unam.ciencias.edd.ComparableIndexable;
 import mx.unam.ciencias.edd.Diccionario;
 import mx.unam.ciencias.edd.MonticuloMinimo;
@@ -65,16 +67,31 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 			return otraPalabra.repeticiones - this.repeticiones;
 		}
 
+		/**
+		 * Regresa el índice de la palabra.
+		 * 
+		 * @return Indice de la palabra.
+		 */
 		@Override
 		public int getIndice() {
 			return indice;
 		}
 
+		/**
+		 * Establece el índice de la palabra.
+		 * 
+		 * @param indice Nuevo indice de la palabra.
+		 */
 		@Override
 		public void setIndice(int indice) {
 			this.indice = indice;
 		}
 
+		/**
+		 * Genera una cadena con la palabra.
+		 * 
+		 * @return cadebna con la palabra.
+		 */
 		@Override
 		public String toString() {
 			return palabra;
@@ -85,16 +102,31 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 
 		private final Iterator<String> iteradorDiccionario = palabras.iteradorLlaves();
 
+		/**
+		 * Checa si hay elementos por iterar.
+		 * 
+		 * @return true si quedan elementos por iterar, falso en caso contrario.
+		 */
 		public boolean hasNext() {
 			return iteradorDiccionario.hasNext();
 		}
 
+		/**
+		 * Regresa la siguiente palabra
+		 * 
+		 * @return La siguiente palabra
+		 * @throws NoSuchElementException Si no quedan elementos por iterar.
+		 */
 		public PalabraContada next() {
 			String palabra = iteradorDiccionario.next();
 			return new PalabraContada(palabra, palabras.get(palabra));
 		}
 	}
 
+	/*
+	 * Elimina acentos, caracteres que no sean alfabéticos y pasa todas las letras a
+	 * minúscula
+	 */
 	private String normalizarCadena(String cadena) {
 		String cadenaNormalizada = Normalizer.normalize(cadena, Normalizer.Form.NFKD);
 		cadenaNormalizada = cadenaNormalizada.trim().toLowerCase();
@@ -135,27 +167,57 @@ public class Archivo implements Iterable<Archivo.PalabraContada> {
 		}
 	}
 
+	/**
+	 * regresa el total de palabras en el archivo.
+	 * 
+	 * @return Total de palabras en el archivo.
+	 */
 	public int totalPalabras() {
 		return palabras.getElementos();
 	}
 
+	/**
+	 * Checa si una palabra está en el archivo.
+	 * 
+	 * @param palabra Cadena con la palabra a revisar.
+	 * @return true si la palabra se encuentra en el archivo y false si no.
+	 */
 	public boolean contienePalabra(String palabra) {
 		return palabras.contiene(normalizarCadena(palabra));
 	}
 
+	/**
+	 * Regresa un montículo mínimo con las palabras constadas del archivo.
+	 * 
+	 * @return Montículo mínimo con las palabras del archivo.
+	 */
 	public MonticuloMinimo<Archivo.PalabraContada> monticuloPalabras() {
 		return new MonticuloMinimo<Archivo.PalabraContada>(this, palabras.getElementos());
 	}
 
+	/**
+	 * regresa un iterador de las palabras conttadas del archivo.
+	 */
 	@Override
 	public Iterator<Archivo.PalabraContada> iterator() {
 		return new Iterador();
 	}
 
+	/**
+	 * Regresa el nombre del archivo.
+	 * 
+	 * @return Nombre del archivo (nombre sin extensión del archivo del cual se
+	 *         leyeron las palabras)
+	 */
 	public String obtenerNombre() {
 		return nombre;
 	}
 
+	/**
+	 * Regresa el id del archivo.
+	 * 
+	 * @return ID del archivo.
+	 */
 	public int obtenerIdentificador() {
 		return identificador;
 	}

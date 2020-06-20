@@ -10,6 +10,10 @@ import mx.unam.ciencias.edd.proyecto3.html.EtiquetaSimple;
 import mx.unam.ciencias.edd.proyecto3.util.Pareja;
 import mx.unam.ciencias.edd.proyecto3.util.UtilHTML;
 
+/**
+ * Clase con métodos estáticos que se encargan de generar el html necesario para
+ * los reportes.
+ */
 public class UtilReportes {
 
     private UtilReportes() {
@@ -45,7 +49,7 @@ public class UtilReportes {
      * @param datos Datos de la tabla.
      * @return Una tabla html con los datos.
      */
-    private static ContenidoHTML tabla(Iterable<String[]> datos) {
+    public static ContenidoHTML tabla(Iterable<String[]> datos) {
         if (datos == null)
             throw new IllegalArgumentException("No se permiten parámetros null.");
         EtiquetaEmparejada tabla = UtilHTML.tabla();
@@ -99,6 +103,15 @@ public class UtilReportes {
         return cabezaDocumento;
     }
 
+    /**
+     * genera la etiqueta cuerpo del html junto con la información común para todos
+     * los reportes
+     * 
+     * @param titulo    Título del reporte.
+     * @param rutaPadre Ruta al archivo padre del reporte o <code>null</code> para
+     *                  generar el cuerpo del reporte general
+     * @return Etiqueta con el cuerpo del html
+     */
     public static EtiquetaEmparejada cuerpoDocumento(String titulo, String rutaPadre) {
         EtiquetaEmparejada cuerpo = UtilHTML.cuerpo();
         cuerpo.agregarContenido(tituloDocumento(titulo));
@@ -107,6 +120,13 @@ public class UtilReportes {
         return cuerpo;
     }
 
+    /**
+     * Genera el html del reporte del conteo de las palabras.
+     * 
+     * @param datos Iterable de las entradas correspondientes al reporte de las
+     *              palabras
+     * @return ContenidoHTML del reporte generado.
+     */
     public static ContenidoHTML reporteConteo(Iterable<String[]> datos) {
         EtiquetaEmparejada division = UtilHTML.division("reporteConteoPalabras", "reporte");
         division.agregarContenido(UtilHTML.h2("Conteo de Palabras"));
@@ -114,6 +134,14 @@ public class UtilReportes {
         return division;
     }
 
+    /**
+     * Genera el html correspondiente al reporte de Gráfica de Pastel y de gráfica
+     * de barras.
+     * 
+     * @param grafica       Gráfica del reporte.
+     * @param tituloGrafica Título de la gráfica.
+     * @return ContenidoHTML del reporte generado.
+     */
     public static ContenidoHTML reporteGraficas(ContenidoHTML grafica, String tituloGrafica) {
         EtiquetaEmparejada division = UtilHTML.division("reporte_" + tituloGrafica.replaceAll(" ", ""), "reporte");
         division.agregarContenido(UtilHTML.h2(tituloGrafica));
@@ -121,7 +149,16 @@ public class UtilReportes {
         return division;
     }
 
-    public static ContenidoHTML reporteGraficoConLeyenda(ContenidoHTML grafico, Iterable<String[]> leyendas, String titulo) {
+    /**
+     * Genera el html de los reportes de los árbole binarios.
+     * 
+     * @param grafico  Grafico del reporte.
+     * @param leyendas Iterable a partir del cuál crear la Tabla de leyendas.
+     * @param titulo   Titulo del reporte.
+     * @return ContenidoHTML del reporte generado.
+     */
+    public static ContenidoHTML reporteGraficoConLeyenda(ContenidoHTML grafico, Iterable<String[]> leyendas,
+            String titulo) {
         String tituloSinEspacios = titulo.replaceAll(" ", "");
         EtiquetaEmparejada division = UtilHTML.division("reporte_" + tituloSinEspacios, "reporte");
         division.agregarContenido(UtilHTML.h2(titulo));
@@ -136,6 +173,13 @@ public class UtilReportes {
         return division;
     }
 
+    /**
+     * Genera el código html del reporte de archivos con total de palabras.
+     * 
+     * @param archivos Colección de archivos junto con con el nombre en el sistema
+     *                 de los archivos para generar los enlaces.
+     * @return ContenidoHTML del reporte generado.
+     */
     public static ContenidoHTML reporteTotalPalabras(Coleccion<Pareja<Archivo, String>> archivos) {
         Coleccion<String[]> coleccionArchivos = new Lista<>();
         coleccionArchivos.agrega(new String[] { "nombre", "total de palabras" });
@@ -151,12 +195,17 @@ public class UtilReportes {
         return division;
     }
 
+    /*
+     * Método auxiliar para generar el código html correspondiente el títul del
+     * documento
+     */
     private static ContenidoHTML tituloDocumento(String titulo) {
         EtiquetaEmparejada tituloDocumento = UtilHTML.h1(titulo);
         tituloDocumento.agregarAtributo("id", "Reporte_" + titulo);
         return tituloDocumento;
     }
 
+    /* Método auxiliar para generar el enlace al archivo del reporte general. */
     private static ContenidoHTML enlaceArchivoPadre(String rutaPadre) {
         EtiquetaEmparejada archivoPadre = UtilHTML.h2();
         archivoPadre.agregarAtributo("id", "enlaceArchivoPadre");
